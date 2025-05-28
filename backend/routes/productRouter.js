@@ -70,7 +70,7 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
   
       try {
         fs.writeFileSync(savePath, file.buffer);
-        src.push(`/api/img/download/${fileUUID}.${mimeType}`);
+        src.push(`${fileUUID}.${mimeType}`);
       } 
       catch (err) {
         console.error('儲存圖片失敗:', err);
@@ -138,7 +138,7 @@ router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
     const srcArray = rows[0].src;
 
     for (const url of srcArray) {
-      const filename = url.split('/')[url.split('/').length - 1];
+      const filename = url;
       const filePath = path.join(__dirname, '../uploadDB',filename);
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }

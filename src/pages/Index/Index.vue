@@ -8,7 +8,7 @@
           <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
             <el-carousel-item v-for="item in obj.src" :key="item">
               <div class="img_box">
-                <img :src="item" alt="">
+                <img :src="`/api/img/download/${item}`" alt="">
               </div>
             </el-carousel-item>
           </el-carousel>

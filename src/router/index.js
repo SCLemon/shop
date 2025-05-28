@@ -40,7 +40,10 @@ router.beforeEach(async (to, from, next) => {
                 }
             })
             if(res.data.type == 'success') next();
-            else next('/verify')
+            else {
+                next('/verify')
+                location.reload();
+            }
         }
         catch(e){
             console.log(e)

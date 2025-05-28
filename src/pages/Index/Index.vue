@@ -3,17 +3,7 @@
     <div class="List">
       <Upload v-if="userInfo && userInfo.level == 2"></Upload>
       <div class="List_item" v-for="(obj,id) in list" :key="id">
-        <div class="dropdown" v-if="userInfo && userInfo.level == 2">
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>編輯</el-dropdown-item>
-              <el-dropdown-item>刪除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
+        <Dropdown v-if="userInfo && userInfo.level == 2" :idx="obj.uuid"></Dropdown>
         <div class="List_item_img">
           <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
             <el-carousel-item v-for="item in obj.src" :key="item">
@@ -43,10 +33,11 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie';
 import Upload from './components/Upload.vue'
+import Dropdown from './components/Dropdown.vue';
 export default {
   name:'Main',
   components:{
-    Upload
+    Upload, Dropdown
   },
   data(){
     return {
@@ -158,12 +149,6 @@ export default {
   .List_item_icon>i:hover{
     cursor: pointer;
     color:rgba(0,0,0,1);
-  }
-  .dropdown{
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index:99;
   }
   .List_add{
     display: flex;

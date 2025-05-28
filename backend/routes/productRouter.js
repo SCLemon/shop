@@ -90,7 +90,7 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
     }
 });
 
-// 回傳 product 表中資料
+// 獲取資料
 router.get('/api/product/get',async(req,res)=>{
   try {
     const [rows] = await db.execute('SELECT * FROM product ORDER BY id DESC');
@@ -108,6 +108,7 @@ router.get('/api/product/get',async(req,res)=>{
   }
 })
 
+// 下載圖片
 router.get('/api/img/download/:filename',(req,res)=>{
   const filename = req.params.filename;
   const imagePath = path.join(__dirname, '../uploadDB', filename);
@@ -121,5 +122,34 @@ router.get('/api/img/download/:filename',(req,res)=>{
 
 })
 
+// 刪除商品
+router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
+
+  const { uuid } = req.params;
+
+  try {
+
+    const [rows] = await db.execute('SELECT src FROM product WHERE uuid = ?', [uuid]);
+
+    if (rows.length === 0) {
+      return res.send({ type: 'error', msg: '商品刪除失敗' });
+    }
+
+    const srcArray = rows[0].src;
+
+    for (const url of srcArray) {
+      const filename = url.split('/')[url.split('/').length - 1];
+      const filePath = path.join(__dirname, '../uploadDB',filename);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    await db.execute('DELETE FROM product WHERE uuid = ?', [uuid]);
+    return res.send({ type: 'success', msg: '商品刪除成功' });
+  }
+  catch(e){
+    console.error('刪除商品時發生錯誤:', e);
+    return res.send({ type: 'error', msg: '系統異常錯誤，請洽客服人員。' });
+  }
+})
   
 module.exports = router;

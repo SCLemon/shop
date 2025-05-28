@@ -14,6 +14,6 @@ export default {
     .main{
         display: flex;
         width: 100vw;
-        height: calc(100vh - 160px);
+        height: calc(100vh - 140px);
     }
 </style>

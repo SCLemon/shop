@@ -17,7 +17,7 @@ export default {
     .footer{
         width: 100vw;
         height: 70px;
-        background: rgba(210, 105, 30, 0.6);
+        background: rgba(117, 67, 31, 0.6);
         box-sizing: border-box;
         text-align: center;
         display: flex;

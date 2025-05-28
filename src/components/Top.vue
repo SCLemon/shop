@@ -2,7 +2,7 @@
   <div>
         <!-- pc -->
         <div class="top">
-      <div class="logo" @click="goTo('/index')">
+      <div class="logo" @click="goTo('1','/index')">
         <img src="img/logo_expand.png" alt="">
       </div>
       <div class="search">
@@ -10,18 +10,18 @@
         <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
       </div>
       <div class="top_item_box">
-        <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('/index')">購物首頁</div>
-        <div :class="`top_item ${$route.path.includes('/login')?'top_item_current_page':''}`" v-if="!0"  @click="goTo('/login')">登入 | 註冊</div>
+        <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('1','/index')">購物首頁</div>
+        <div :class="`top_item ${$route.path.includes('/login')?'top_item_current_page':''}`" v-if="!0"  @click="goTo('1','/login')">登入 | 註冊</div>
         <template v-if="0">
-          <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('/member')">會員中心</div>
-          <div :class="`top_item ${$route.path.includes('/cart')?'top_item_current_page':''}`"  @click="goTo('/cart')">購物列表</div>
+          <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
+          <div :class="`top_item ${$route.path.includes('/cart')?'top_item_current_page':''}`"  @click="goTo('1','/cart')">購物列表</div>
         </template>
       </div>
     </div>
 
     <!-- mobile -->
     <div class="top_mobile_box">
-      <div class="logo_mobile"  @click="goTo('/index')">
+      <div class="logo_mobile"  @click="goTo('1','/index')">
         <img src="img/logo.png" alt="">
       </div>
       <div class="search_mobile">
@@ -31,11 +31,11 @@
       <div class="top_mobile" ref="top_mobile" @click="toggleMobileList()"><i class="fa-solid fa-bars"></i></div>
     </div>
     <div class="top_mobile_list" ref="top_mobile_list">
-      <div class="top_mobile_list_item"  @click="goTo('/index')">購物首頁</div>
-      <div class="top_mobile_list_item" v-if="1"  @click="goTo('/login')">登入 | 註冊</div>
+      <div class="top_mobile_list_item"  @click="goTo('2','/index')">購物首頁</div>
+      <div class="top_mobile_list_item" v-if="1"  @click="goTo('2','/login')">登入 | 註冊</div>
       <template v-if="0">
-        <div class="top_mobile_list_item"  @click="goTo('/member')">會員中心</div>
-        <div class="top_mobile_list_item"  @click="goTo('/cart')">購物列表</div>
+        <div class="top_mobile_list_item"  @click="goTo('2','/member')">會員中心</div>
+        <div class="top_mobile_list_item"  @click="goTo('2','/cart')">購物列表</div>
       </template>
     </div>
   </div>
@@ -50,13 +50,19 @@ export default {
         }
     },
     methods:{
-        goTo(path){
-        this.$router.push(path).catch(e=>{});
+        goTo(type,path){
+          if(type == 1){
+            this.$router.push(path).catch(e=>{});
+          }
+          else if(type == 2 && this.mobile_list_open){
+            this.$router.push(path).catch(e=>{});
+            this.toggleMobileList();
+          }
         },
         toggleMobileList(){
-        this.mobile_list_open = !this.mobile_list_open;
-        this.$refs['top_mobile'].classList.toggle('top_mobile_open')
-        this.$refs['top_mobile_list'].classList.toggle('top_mobile_list_open')
+          this.mobile_list_open = !this.mobile_list_open;
+          this.$refs['top_mobile'].classList.toggle('top_mobile_open')
+          this.$refs['top_mobile_list'].classList.toggle('top_mobile_list_open')
         }
     }
 }
@@ -121,10 +127,10 @@ export default {
 }
 .top_item:hover{
   cursor: pointer;
-  border-bottom: 2px solid chocolate;
+  border-bottom: 2.5px solid chocolate;
 }
 .top_item_current_page{
-  border-bottom: 2px solid chocolate;
+  border-bottom: 2.5px solid chocolate;
 }
 /* 500px */
 .top_mobile_box{
@@ -186,9 +192,10 @@ export default {
     width: 70px;
     height: 70px;
     font-size: 24px;
-    line-height: 60px;
+    line-height: 70px;
     text-align: center;
     margin-left: auto;
+    
   }
 
   .top_mobile_open{
@@ -199,10 +206,11 @@ export default {
   .top_mobile_list{
     width: 100%;
     box-sizing: border-box;
-    display: block;
     opacity: 0;
+    display: block;
     transition: 0.3s opacity;
     position: absolute;
+    z-index: 100;
   }
 
   .top_mobile_list_open{

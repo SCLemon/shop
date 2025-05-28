@@ -19,18 +19,14 @@ const limiter = rateLimit({
 app.use(limiter);
 
 
-// 初始化資料庫
-const { connectToDatabase, disconnectFromDatabase } = require('./db/db');
-connectToDatabase();
-
 process.on('SIGINT', function() {
-    disconnectFromDatabase();
+
     process.exit(0);
 });
 
-// run router
-const runRouter = require('./routes/runRouter');
-app.use(runRouter);
+// login router
+const loginRouter = require('./routes/loginRouter');
+app.use(loginRouter);
 
 
 app.listen(3007,()=>{

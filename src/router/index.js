@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Index from '../pages/Index/Index.vue'
-import Login from '../pages/Login/Login.vue'
+import Verify from '../pages/Verify/Verify.vue'
 Vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
@@ -11,8 +11,8 @@ const router = new VueRouter({
             component:Index
         },
         {
-            path:'/login',
-            component:Login
+            path:'/verify',
+            component:Verify
         },
         {
             path:'/',

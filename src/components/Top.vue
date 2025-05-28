@@ -1,23 +1,23 @@
 <template>
   <div>
         <!-- pc -->
-        <div class="top">
-      <div class="logo" @click="goTo('1','/index')">
-        <img src="img/logo_expand.png" alt="">
+      <div class="top">
+        <div class="logo" @click="goTo('1','/index')">
+          <img src="img/logo_expand.png" alt="">
+        </div>
+        <div class="search">
+          <input type="text" placeholder="想買什麼？這裡找！" class="search_input">
+          <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
+        </div>
+        <div class="top_item_box">
+          <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('1','/index')">購物首頁</div>
+          <div :class="`top_item ${$route.path.includes('/verify')?'top_item_current_page':''}`" v-if="!0"  @click="goTo('1','/verify')">登入 | 註冊</div>
+          <template v-if="0">
+            <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
+            <div :class="`top_item ${$route.path.includes('/cart')?'top_item_current_page':''}`"  @click="goTo('1','/cart')">購物列表</div>
+          </template>
+        </div>
       </div>
-      <div class="search">
-        <input type="text" placeholder="想買什麼？這裡找！" class="search_input">
-        <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
-      </div>
-      <div class="top_item_box">
-        <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('1','/index')">購物首頁</div>
-        <div :class="`top_item ${$route.path.includes('/login')?'top_item_current_page':''}`" v-if="!0"  @click="goTo('1','/login')">登入 | 註冊</div>
-        <template v-if="0">
-          <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
-          <div :class="`top_item ${$route.path.includes('/cart')?'top_item_current_page':''}`"  @click="goTo('1','/cart')">購物列表</div>
-        </template>
-      </div>
-    </div>
 
     <!-- mobile -->
     <div class="top_mobile_box">
@@ -32,7 +32,7 @@
     </div>
     <div class="top_mobile_list" ref="top_mobile_list">
       <div class="top_mobile_list_item"  @click="goTo('2','/index')">購物首頁</div>
-      <div class="top_mobile_list_item" v-if="1"  @click="goTo('2','/login')">登入 | 註冊</div>
+      <div class="top_mobile_list_item" v-if="1"  @click="goTo('2','/verify')">登入 | 註冊</div>
       <template v-if="0">
         <div class="top_mobile_list_item"  @click="goTo('2','/member')">會員中心</div>
         <div class="top_mobile_list_item"  @click="goTo('2','/cart')">購物列表</div>
@@ -188,7 +188,7 @@ export default {
     padding-right: 5px;
   }
   .search_mobile_input{
-    width: 90%;
+    width: 80%;
     border: 0;
     outline: 0;
   }
@@ -203,26 +203,29 @@ export default {
     line-height: 70px;
     text-align: center;
     margin-left: auto;
-    
+    transition: 0.75s all;
   }
-
+  .top_mobile:hover{
+    cursor: pointer;
+  }
   .top_mobile_open{
     background-color: rgba(0,0,0,0.8);
     color: white;
   }
 
   .top_mobile_list{
-    width: 100%;
+    margin-top: 1px;
+    width: 50%;
     box-sizing: border-box;
-    opacity: 0;
-    display: block;
-    transition: 0.3s opacity;
     position: absolute;
+    display: block;
+    right: -100%;
     z-index: 100;
+    transition: 0.75s right;
   }
 
   .top_mobile_list_open{
-    opacity: 1;
+    right: 0%;
   }
 
   .top_mobile_list_item{

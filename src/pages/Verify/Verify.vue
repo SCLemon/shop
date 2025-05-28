@@ -1,18 +1,24 @@
 <template>
   <div class="main">
     <div class="box">
-        <div class="login_title">登入｜註冊</div>
+        <div class="login_title">
+            <span :class="`${type==1?'selected_type':''}`" @click="type = 1">登入</span>｜<span :class="`${type==2?'selected_type':''}`" @click="type = 2">註冊</span>
+        </div>
+        <div class="login_info" v-if="type == 2">
+            <div class="subText">使用者信箱：</div>
+            <el-input v-model="mail" placeholder="請輸入電子信箱" clearable></el-input>
+        </div>
         <div class="login_info">
             <div class="subText">使用者帳號：</div>
-            <el-input v-model="account" placeholder="請輸入電子信箱" clearable></el-input>
+            <el-input v-model="account" placeholder="請輸入帳號" clearable></el-input>
         </div>
         <div class="login_info">
             <div class="subText">使用者密碼：</div>
             <el-input v-model="password" placeholder="請輸入密碼" show-password clearable></el-input>
-            <div class="forget">忘記密碼？</div>
+            <div class="forget" v-if="type == 1">忘記密碼？</div>
         </div>
         <div class="login_info">
-            <el-button type="primary" :loading="isLoading" class="login_btn">進行驗證</el-button>
+            <el-button type="primary" :loading="isLoading" class="login_btn">{{ isLoading? '驗證中...' : type==1 ?'登入':'註冊' }}</el-button>
         </div>
         <div class="version">Created By Joanna @v1.0.0</div>
     </div>
@@ -21,10 +27,12 @@
 
 <script>
 export default {
-    name:'Login',
+    name:'Verify',
     data(){
         return {
             isLoading:false,
+            type:1,
+            mail:'',
             account:'',
             password:'',
         }
@@ -44,15 +52,20 @@ export default {
         width: 60%;
         max-width: 720px;
         min-width: 350px;
-        height: 495px;
+        height: 475px;
         border-radius: 5px;
         box-shadow: 3px 4px 6px gray;
+        position: relative;
     }
     .login_title{
         font-size: 24px;
         font-weight: bolder;
         text-align: center;
         line-height: 100px;
+    }
+    .type{
+        display: inline-block;
+        cursor: pointer;
     }
     .login_info{
         width: 90%;
@@ -76,8 +89,16 @@ export default {
         color: blue;
     }
     .version{
-        margin-top: 80px;
+        position: absolute;
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
         color: rgba(210,210,210);
         text-align: center;
+        bottom: 0;
+        left: 0;
+    }
+    .selected_type{
+        color: chocolate;
     }
 </style>

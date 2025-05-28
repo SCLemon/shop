@@ -6,7 +6,7 @@ module.exports = defineConfig({
     devServer:{
         https:false,
         proxy: {
-            '/run': {
+            '/api': {
                 target: 'http://127.0.0.1:3007',
             },
         }

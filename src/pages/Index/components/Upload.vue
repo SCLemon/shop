@@ -65,7 +65,13 @@ export default {
 
                 if(res.data.type == 'success'){
                     this.addTableVisible = false;
-                    this.upload = {};
+                    this.upload = {
+                        name:'',
+                        detail:'',
+                        price: 0,
+                        remaining:1,
+                        attachments:[],
+                    }
                     this.$bus.$emit('refreshProduct')
                 }
                 this.$bus.$emit('handleAlert','新增商品通知',res.data.msg,res.data.type)

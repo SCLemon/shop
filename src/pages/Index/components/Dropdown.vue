@@ -127,7 +127,13 @@ export default {
 
           if(res.data.type == 'success'){
               this.reviseTableVisible = false;
-              this.upload = {};
+              this.upload = {
+                name:'',
+                detail:'',
+                price: 0,
+                remaining:1,
+                attachments:[],
+              }
               this.$bus.$emit('refreshProduct')
               this.currentIdx = '';
           }

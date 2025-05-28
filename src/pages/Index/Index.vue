@@ -3,7 +3,7 @@
     <div class="List">
       <Upload v-if="userInfo && userInfo.level == 2"></Upload>
       <div class="List_item" v-for="(obj,id) in list" :key="id">
-        <Dropdown v-if="userInfo && userInfo.level == 2" :idx="obj.uuid"></Dropdown>
+        <Dropdown v-if="userInfo && userInfo.level == 2" :idx="obj.uuid" :item="obj"></Dropdown>
         <div class="List_item_img">
           <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
             <el-carousel-item v-for="item in obj.src" :key="item">

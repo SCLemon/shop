@@ -151,5 +151,55 @@ router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
     return res.send({ type: 'error', msg: '系統異常錯誤，請洽客服人員。' });
   }
 })
+
+// 更新商品
+router.put('/api/product/revise/:uuid', upload.fields([{ name: 'attachments' }]), authMiddleWare, async (req, res) => {
+  const uuid = req.params.uuid;
+  const { name, price, detail, remaining } = req.body;
+  const attachments = req.files['attachments'] || [];
+
+  try {
+    // 查詢原有商品資料
+    const [rows] = await db.execute('SELECT * FROM product WHERE uuid = ?', [uuid]);
+    if (rows.length === 0) {
+      return res.send({ type: 'error', msg: '找不到該商品' });
+    }
+
+    const oldImages = rows[0].src
+
+    // 刪除舊圖片（從 ../uploadDB）
+    for (const filename of oldImages) {
+      const filePath = path.join(__dirname, '../uploadDB', filename);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    // 儲存新圖片
+    const newSrc = [];
+    for (const file of attachments) {
+      const fileUUID = uuidv4();
+      let mimeType = (file.originalname).split('.')[(file.originalname).split('.').length - 1]
+      const savePath = path.join(__dirname, '../uploadDB', `${fileUUID}.${mimeType}`);
   
+      try {
+        fs.writeFileSync(savePath, file.buffer);
+        newSrc.push(`${fileUUID}.${mimeType}`);
+      } 
+      catch (err) {
+        console.error('儲存圖片失敗:', err);
+        return res.send({ type: 'error', msg: '新增商品失敗' });
+      }
+    }
+
+    // 更新資料庫內容
+    await db.execute(
+      'UPDATE product SET name = ?, detail = ?, price = ?, remaining = ?, src = ? WHERE uuid = ?',
+      [name, detail, price, remaining, JSON.stringify(newSrc), uuid]
+    );
+
+    return res.send({ type: 'success', msg: '商品更新成功' });
+  } catch (err) {
+    console.error('商品更新錯誤:', err);
+    return res.send({ type: 'error', msg: '商品更新失敗' });
+  }
+});
 module.exports = router;

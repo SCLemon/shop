@@ -6,7 +6,7 @@
         </div>
         <div class="login_info" v-if="type == 2">
             <div class="subText">使用者信箱：</div>
-            <el-input v-model="mail" placeholder="請輸入電子信箱" clearable></el-input>
+            <el-input v-model="email" placeholder="請輸入電子信箱" clearable></el-input>
         </div>
         <div class="login_info">
             <div class="subText">使用者帳號：</div>
@@ -18,7 +18,7 @@
             <div class="forget" v-if="type == 1">忘記密碼？</div>
         </div>
         <div class="login_info">
-            <el-button type="primary" :loading="isLoading" class="login_btn">{{ isLoading? '驗證中...' : type==1 ?'登入':'註冊' }}</el-button>
+            <el-button type="primary" :loading="isLoading" @click="useMethod()" class="login_btn">{{ isLoading? '驗證中...' : type==1 ?'登入':'註冊' }}</el-button>
         </div>
         <div class="version">Created By Joanna @v1.0.0</div>
     </div>
@@ -26,15 +26,33 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name:'Verify',
     data(){
         return {
             isLoading:false,
             type:1,
-            mail:'',
+            email:'',
             account:'',
             password:'',
+        }
+    },
+    methods:{
+        useMethod(){
+            if(this.type == 1) this.login();
+            else if(this.type == 2) this.register();
+        },
+        async login(){
+
+        },
+        async register(){
+           const res = await axios.post('/api/verify/register',{
+                email:this.email,
+                account:this.account,
+                password: this.password
+           });
+           console.log(res.data)
         }
     }
 }

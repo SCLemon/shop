@@ -18,15 +18,24 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+// 資料庫處理
+const pool = require('./db/db.js');
+process.on('SIGINT', async function() {
 
-process.on('SIGINT', function() {
-
-    process.exit(0);
+    console.log('\n正在關閉伺服器與資料庫連線池...');
+    try {
+        await pool.end();
+        console.log('連線池已關閉');
+    } catch (err) {
+        console.error('關閉連線池失敗：', err.message);
+    } finally {
+        process.exit(0);
+    }
 });
 
-// login router
-const loginRouter = require('./routes/loginRouter');
-app.use(loginRouter);
+// verify router
+const verifyRouter = require('./routes/verifyRouter');
+app.use(verifyRouter);
 
 
 app.listen(3007,()=>{

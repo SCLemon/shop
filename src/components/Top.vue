@@ -125,13 +125,20 @@ export default {
   width: 120px;
   text-align: center;
   margin-right: 1px;
+  /* 動畫底線設定 */
+  background-image: linear-gradient(to right, chocolate 0%, chocolate 100%);
+  background-size: 0% 2.5px;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  transition: background-size 0.3s ease;
 }
 .top_item:hover{
   cursor: pointer;
-  border-bottom: 2.5px solid chocolate;
+  background-size: 100% 2.5px;
 }
 .top_item_current_page{
-  border-bottom: 2.5px solid chocolate;
+  background-image: linear-gradient(to right, chocolate 0%, chocolate 100%);
+  background-size: 100% 2.5px;
 }
 /* 500px */
 .top_mobile_box{

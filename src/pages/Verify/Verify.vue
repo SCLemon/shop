@@ -2,7 +2,7 @@
   <div class="main">
     <div class="box">
         <div class="login_title">
-            <span :class="`${type==1?'selected_type':''}`" @click="type = 1">登入</span>｜<span :class="`${type==2?'selected_type':''}`" @click="type = 2">註冊</span>
+            <span :class="`type ${type==1?'selected_type':''}`" @click="type = 1">登入</span>｜<span :class="`type ${type==2?'selected_type':''}`" @click="type = 2">註冊</span>
         </div>
         <div class="login_info" v-if="type == 2">
             <div class="subText">使用者信箱：</div>
@@ -97,6 +97,9 @@ export default {
         text-align: center;
         bottom: 0;
         left: 0;
+    }
+    .type:hover{
+        cursor: pointer;
     }
     .selected_type{
         color: chocolate;

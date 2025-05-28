@@ -2,16 +2,92 @@ const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const db = require('../db/db.js');
+const multer = require('multer');
+const path = require('path')
+const fs = require('fs')
+
+// level 2 才可以進行操作
+const authMiddleWare = async (req, res, next) => {
+    try {
+        const token = req.headers['x-user-token'];
+        if (!token) {
+            return res.send({
+                type:'error',
+                msg:'使用者身份異常'
+            })
+        }
+        const [rows] = await db.query(`SELECT level FROM user WHERE token = ?`, [token]);
+  
+        if (rows.length === 0) {
+            return res.send({
+                type:'error',
+                msg:'使用者身份異常'
+            })
+        }
+  
+        const user = rows[0];
+  
+        if (user.level !== 2) {
+            return res.send({
+                type:'error',
+                msg:'使用者權限不足'
+            })
+        }
+  
+        next();
+  
+    } catch (err) {
+        console.error('authMiddleWare 錯誤:', err);
+        return res.send({
+            type:'error',
+            msg:'系統異常錯誤，請洽客服人員。'
+        })
+    }
+};
 
 
-// 先檢查訪問者在 User 表中的 level 信息，level = 2 才可執行下一步
-function authMiddleWare(){
-
-}
-
-// product 表中建立
-router.post('/api/product/add',authMiddleWare,async (req, res) => {
+// product 表中建立商品（uuid, name, detail, price, remaining, src(json))
+const upload = multer();
+router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMiddleWare, async (req, res) => {
     
+    // 商品識別碼
+    const idx = uuidv4();
+    const { name, price, detail, remaining } = req.body;
+  
+    // 驗證欄位
+    if (!name || !price || !detail || !remaining) {
+      return res.send({ type: 'error', msg: '缺少必要欄位' });
+    }
+  
+    const attachments = req.files['attachments'] || [];
+    const src = [];
+  
+    // 儲存圖片到 ../uploadDB 並建立 UUID 對應
+    for (const file of attachments) {
+      const fileUUID = uuidv4();
+      let mimeType = (file.originalname).split('.')[(file.originalname).split('.').length - 1]
+      const savePath = path.join(__dirname, '../uploadDB', `${fileUUID}.${mimeType}`);
+  
+      try {
+        fs.writeFileSync(savePath, file.buffer);
+        src.push = `/api/img/download/${fileUUID}`;
+      } 
+      catch (err) {
+        console.error('儲存圖片失敗:', err);
+        return res.send({ type: 'error', msg: '新增商品失敗' });
+      }
+    }
+  
+    try {
+      // 寫入資料庫
+      await db.execute(`INSERT INTO product (uuid, name, detail, price, remaining, src) VALUES (?, ?, ?, ?, ?, ?)`, [idx, name, detail, price, remaining, JSON.stringify(src)]);
+  
+      return res.send({ type: 'success', msg: '商品新增成功' });
+    } 
+    catch (error) {
+      console.error('寫入資料庫失敗:', error);
+      return res.send({ type: 'error', msg: '新增商品失敗' });
+    }
 });
   
 

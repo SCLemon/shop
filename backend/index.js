@@ -37,6 +37,9 @@ process.on('SIGINT', async function() {
 const verifyRouter = require('./routes/verifyRouter');
 app.use(verifyRouter);
 
+// product router
+const productRouter = require('./routes/productRouter');
+app.use(productRouter);
 
 app.listen(3007,()=>{
     console.log('server is running on port 3007')

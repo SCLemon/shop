@@ -1,143 +1,38 @@
 <template>
-  <div class="List">
-    <div class="List_item List_add" v-if="userInfo && userInfo.level == 2">
-      <div><i class="fa-solid fa-plus"></i></div>
-    </div>
-    <div class="List_item">
-      <div class="dropdown" v-if="userInfo && userInfo.level == 2">
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>編輯</el-dropdown-item>
-            <el-dropdown-item>刪除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-      <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="img_box">
-              <img src="img/logo_expand.png" alt="">
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="List_item_title">
-        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
-      </div>
-      <div class="List_item_price">
-        $80
-      </div>
-      <div class="List_item_icon">
-        <i title="直接購買" class="fa-solid fa-credit-card"></i>
-        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
-      </div>
-    </div>
-    <div class="List_item">
-      <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="img_box">
-              <img src="img/logo_expand.png" alt="">
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="List_item_title">
-        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
-      </div>
-      <div class="List_item_price">
-        $80
-      </div>
-      <div class="List_item_icon">
-        <i title="直接購買" class="fa-solid fa-credit-card"></i>
-        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
-      </div>
-    </div>
-    <div class="List_item">
-      <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="img_box">
-              <img src="img/logo_expand.png" alt="">
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="List_item_title">
-        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
-      </div>
-      <div class="List_item_price">
-        $80
-      </div>
-      <div class="List_item_icon">
-        <i title="直接購買" class="fa-solid fa-credit-card"></i>
-        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
-      </div>
-    </div>
-    <div class="List_item">
-      <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="img_box">
-              <img src="img/logo_expand.png" alt="">
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="List_item_title">
-        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
-      </div>
-      <div class="List_item_price">
-        $80
-      </div>
-      <div class="List_item_icon">
-        <i title="直接購買" class="fa-solid fa-credit-card"></i>
-        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
-      </div>
-    </div>
-    <div class="List_item">
-      <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="img_box">
-              <img src="img/logo_expand.png" alt="">
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="List_item_title">
-        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
-      </div>
-      <div class="List_item_price">
-        $80
-      </div>
-      <div class="List_item_icon">
-        <i title="直接購買" class="fa-solid fa-credit-card"></i>
-        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
-      </div>
-    </div>
-    <div class="List_item">
-      <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="img_box">
-              <img src="img/logo_expand.png" alt="">
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="List_item_title">
-        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
-      </div>
-      <div class="List_item_price">
-        $80
-      </div>
-      <div class="List_item_icon">
-        <i title="直接購買" class="fa-solid fa-credit-card"></i>
-        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+  <div>
+    <div class="List">
+      <Upload v-if="userInfo && userInfo.level == 2"></Upload>
+      <div class="List_item">
+        <div class="dropdown" v-if="userInfo && userInfo.level == 2">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>編輯</el-dropdown-item>
+              <el-dropdown-item>刪除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <div class="List_item_img">
+          <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
+            <el-carousel-item v-for="item in 4" :key="item">
+              <div class="img_box">
+                <img src="img/logo_expand.png" alt="">
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <div class="List_item_title">
+          極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
+        </div>
+        <div class="List_item_price">
+          $80
+        </div>
+        <div class="List_item_icon">
+          <i title="直接購買" class="fa-solid fa-credit-card"></i>
+          <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -146,12 +41,16 @@
 <script>
 import axios from 'axios';
 import jsCookie from 'js-cookie';
+import Upload from './components/Upload.vue'
 export default {
   name:'Main',
+  components:{
+    Upload
+  },
   data(){
     return {
       text:'',
-      userInfo: {}
+      userInfo: {},
     }
   },
   mounted(){
@@ -160,7 +59,6 @@ export default {
       const jsonPart = info.slice(info.indexOf('{'));
       const obj = JSON.parse(jsonPart);
       this.userInfo = obj
-      console.log(this.userInfo)
     }
   }
 }
@@ -254,6 +152,8 @@ export default {
   ::v-deep .el-carousel__indicators{
     display: none;
   }
+
+
   @media (max-width: 420px){
     .List{
       grid-template-columns: repeat(auto-fit, 175px);

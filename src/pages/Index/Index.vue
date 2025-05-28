@@ -23,7 +23,91 @@
     </div>
     <div class="List_item">
       <div class="List_item_img">
-        <el-carousel height="188px" :autoplay="false" trigger="hover" :loop="false">
+        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <div class="img_box">
+              <img src="img/logo_expand.png" alt="">
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div class="List_item_title">
+        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
+      </div>
+      <div class="List_item_price">
+        $80
+      </div>
+      <div class="List_item_icon">
+        <i title="直接購買" class="fa-solid fa-credit-card"></i>
+        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+      </div>
+    </div>
+    <div class="List_item">
+      <div class="List_item_img">
+        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <div class="img_box">
+              <img src="img/logo_expand.png" alt="">
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div class="List_item_title">
+        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
+      </div>
+      <div class="List_item_price">
+        $80
+      </div>
+      <div class="List_item_icon">
+        <i title="直接購買" class="fa-solid fa-credit-card"></i>
+        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+      </div>
+    </div>
+    <div class="List_item">
+      <div class="List_item_img">
+        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <div class="img_box">
+              <img src="img/logo_expand.png" alt="">
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div class="List_item_title">
+        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
+      </div>
+      <div class="List_item_price">
+        $80
+      </div>
+      <div class="List_item_icon">
+        <i title="直接購買" class="fa-solid fa-credit-card"></i>
+        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+      </div>
+    </div>
+    <div class="List_item">
+      <div class="List_item_img">
+        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <div class="img_box">
+              <img src="img/logo_expand.png" alt="">
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div class="List_item_title">
+        極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
+      </div>
+      <div class="List_item_price">
+        $80
+      </div>
+      <div class="List_item_icon">
+        <i title="直接購買" class="fa-solid fa-credit-card"></i>
+        <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+      </div>
+    </div>
+    <div class="List_item">
+      <div class="List_item_img">
+        <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
           <el-carousel-item v-for="item in 4" :key="item">
             <div class="img_box">
               <img src="img/logo_expand.png" alt="">
@@ -74,6 +158,11 @@ export default {
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     position: relative;
+    transition: 0.5s box-shadow;
+  }
+  .List_item:hover{
+    cursor: pointer;
+    box-shadow: 3px 3px 3px rgba(128, 128, 128,0.7);
   }
   .List_item_img{
     width: 100%;
@@ -128,6 +217,9 @@ export default {
   ::v-deep .el-carousel{
     overflow-y: hidden;
     
+  }
+  ::v-deep .el-carousel__indicators{
+    display: none;
   }
   @media (max-width: 420px){
     .List{

@@ -124,6 +124,7 @@ export default {
 .top_item{
   width: 120px;
   text-align: center;
+  margin-right: 1px;
 }
 .top_item:hover{
   cursor: pointer;

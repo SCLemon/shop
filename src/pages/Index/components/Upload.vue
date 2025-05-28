@@ -32,7 +32,7 @@ export default {
     name:'Upload',
     data(){
         return {
-            addTableVisible:true,
+            addTableVisible:false,
             isLoading:false,
             upload:{
                 name:'',
@@ -66,6 +66,7 @@ export default {
                 if(res.data.type == 'success'){
                     this.addTableVisible = false;
                     this.upload = {};
+                    this.$bus.$emit('refreshProduct')
                 }
                 this.$bus.$emit('handleAlert','新增商品通知',res.data.msg,res.data.type)
             }
@@ -85,7 +86,7 @@ export default {
 
 <style scoped>
   .List_item{
-    height: 275px;
+    height: 295px;
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     position: relative;

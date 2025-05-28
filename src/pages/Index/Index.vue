@@ -2,7 +2,7 @@
   <div>
     <div class="List">
       <Upload v-if="userInfo && userInfo.level == 2"></Upload>
-      <div class="List_item">
+      <div class="List_item" v-for="(obj,id) in list" :key="id">
         <div class="dropdown" v-if="userInfo && userInfo.level == 2">
           <el-dropdown>
             <span class="el-dropdown-link">
@@ -16,18 +16,19 @@
         </div>
         <div class="List_item_img">
           <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-            <el-carousel-item v-for="item in 4" :key="item">
+            <el-carousel-item v-for="item in obj.src" :key="item">
               <div class="img_box">
-                <img src="img/logo_expand.png" alt="">
+                <img :src="item" alt="">
               </div>
             </el-carousel-item>
           </el-carousel>
         </div>
         <div class="List_item_title">
-          極速無線藍牙耳機｜主動降噪・長效續航「極速無線藍牙耳機｜主動降噪・長效續航」
+          {{ obj.name }}
         </div>
+        <div class="List_item_remaining">剩餘 {{ obj.remaining }} 件</div>
         <div class="List_item_price">
-          $80
+          ${{ obj.price }}
         </div>
         <div class="List_item_icon">
           <i title="直接購買" class="fa-solid fa-credit-card"></i>
@@ -51,14 +52,31 @@ export default {
     return {
       text:'',
       userInfo: {},
+      list:[]
     }
   },
   mounted(){
+    this.$bus.$on('refreshProduct',this.getData)
+    this.getData();
     const info = jsCookie.get('x-user-info')
     if(info){
       const jsonPart = info.slice(info.indexOf('{'));
       const obj = JSON.parse(jsonPart);
       this.userInfo = obj
+    }
+  },
+  methods:{
+    async getData(){
+      try{
+        const res = await axios.get('/api/product/get');
+        if(res.data.type == 'success'){
+          this.list = res.data.data;
+        }
+        else this.$bus.$emit('handleAlert','資料獲取通知',res.data.msg,res.data.type)
+      }
+      catch(e){
+        this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+      }
     }
   }
 }
@@ -73,7 +91,7 @@ export default {
     padding: 15px;
   }
   .List_item{
-    height: 275px;
+    height: 295px;
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     position: relative;
@@ -119,10 +137,17 @@ export default {
     left:8px;
     color: chocolate;
   }
+  .List_item_remaining{
+    margin-top: 10px;
+    margin-right: 8px;
+    font-size: 12px;
+    text-align: right;
+    
+  }
   .List_item_icon{
     position: absolute;
     bottom:12px;
-    right: 3px;
+    right: 0px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -157,14 +182,12 @@ export default {
   @media (max-width: 420px){
     .List{
       grid-template-columns: repeat(auto-fit, 175px);
-      justify-content: center;
     }
   }
 
   @media (max-width: 395px){
     .List{
       grid-template-columns: repeat(auto-fit, 165px);
-      justify-content: center;
     }
   }
 </style>

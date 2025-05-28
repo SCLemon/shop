@@ -70,7 +70,7 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
   
       try {
         fs.writeFileSync(savePath, file.buffer);
-        src.push = `/api/img/download/${fileUUID}`;
+        src.push(`/api/img/download/${fileUUID}.${mimeType}`);
       } 
       catch (err) {
         console.error('儲存圖片失敗:', err);
@@ -89,7 +89,37 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
       return res.send({ type: 'error', msg: '新增商品失敗' });
     }
 });
+
+// 回傳 product 表中資料
+router.get('/api/product/get',async(req,res)=>{
+  try {
+    const [rows] = await db.execute('SELECT * FROM product');
+    res.send({
+      type: 'success',
+      data: rows
+    });
+  } 
+  catch (error) {
+    console.error('取得商品資料失敗:', error);
+    res.send({
+      type: 'error',
+      msg: '無法取得商品資料'
+    });
+  }
+})
+
+router.get('/api/img/download/:filename',(req,res)=>{
+  const filename = req.params.filename;
+  const imagePath = path.join(__dirname, '../uploadDB', filename);
+  if (!fs.existsSync(imagePath)) {
+    return res.status(404).send('圖片不存在');
+  }
+
+  res.setHeader('Content-Type', 'application/octet-stream');
+  const readStream = fs.createReadStream(imagePath);
+  readStream.pipe(res);
   
+})
 
   
 module.exports = router;

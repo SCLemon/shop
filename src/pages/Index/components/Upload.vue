@@ -2,7 +2,7 @@
     <div>
         <el-dialog title="新增商品" :visible.sync="addTableVisible">
             <el-upload
-                class="upload-demo" drag  action="#" multiple :auto-upload="false" accept="image/*" :on-change="handleChange">
+                class="upload-demo" drag  action="#" multiple :auto-upload="false" accept="image/*" :on-change="handleChange" :file-list="upload.attachments">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">將文件拖到此處，或<em>點擊上傳</em></div>
                 <div class="el-upload__tip" slot="tip">僅開放上傳 image 且 1:1 為佳。</div>
@@ -86,7 +86,7 @@ export default {
 
 <style scoped>
   .List_item{
-    height: 295px;
+    height: 305px;
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     position: relative;

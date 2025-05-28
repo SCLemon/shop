@@ -91,7 +91,7 @@ export default {
     padding: 15px;
   }
   .List_item{
-    height: 295px;
+    height: 305px;
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     position: relative;
@@ -120,6 +120,7 @@ export default {
     object-fit: contain;
   }
   .List_item_title {
+    margin-top: 10px;
     padding-left: 8px;
     padding-right: 8px;
     line-height: 1.25;

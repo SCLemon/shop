@@ -93,7 +93,7 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
 // 回傳 product 表中資料
 router.get('/api/product/get',async(req,res)=>{
   try {
-    const [rows] = await db.execute('SELECT * FROM product');
+    const [rows] = await db.execute('SELECT * FROM product ORDER BY id DESC');
     res.send({
       type: 'success',
       data: rows
@@ -118,7 +118,7 @@ router.get('/api/img/download/:filename',(req,res)=>{
   res.setHeader('Content-Type', 'application/octet-stream');
   const readStream = fs.createReadStream(imagePath);
   readStream.pipe(res);
-  
+
 })
 
   

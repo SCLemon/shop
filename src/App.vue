@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app">
     <Top></Top>
     <router-view class="view"></router-view>
     <Footer></Footer>
@@ -33,8 +33,9 @@ export default {
 ::-webkit-scrollbar{
   display: none;
 }
-#app {
-  overflow: hidden;
+.app {
+  position: relative;
+  overflow-x: hidden;
 }
 
 .view{

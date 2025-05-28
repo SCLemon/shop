@@ -1,6 +1,6 @@
 <template>
   <div>
-        <!-- pc -->
+      <!-- pc -->
       <div class="top">
         <div class="logo" @click="goTo('1','/index')">
           <img src="img/logo_expand.png" alt="">
@@ -13,7 +13,7 @@
           <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('1','/index')">購物首頁</div>
           <div :class="`top_item ${$route.path.includes('/verify')?'top_item_current_page':''}`" v-if="!isLogin"  @click="goTo('1','/verify')">登入 | 註冊</div>
           <template v-else>
-            <div :class="`top_item ${$route.path.includes('/trade')?'top_item_current_page':''}`"  @click="goTo('1','/trade')">購物列表</div>
+            <div :class="`top_item ${$route.path.includes('/trade')?'top_item_current_page':''}`"  @click="goTo('1','/trade')">交易列表</div>
             <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
           </template>
         </div>
@@ -34,7 +34,7 @@
       <div class="top_mobile_list_item"  @click="goTo('2','/index')">購物首頁</div>
       <div class="top_mobile_list_item" v-if="!isLogin"  @click="goTo('2','/verify')">登入 | 註冊</div>
       <template v-else>
-        <div class="top_mobile_list_item"  @click="goTo('2','/trade')">購物列表</div>
+        <div class="top_mobile_list_item"  @click="goTo('2','/trade')">交易列表</div>
         <div class="top_mobile_list_item"  @click="goTo('2','/member')">會員中心</div>
       </template>
     </div>
@@ -235,7 +235,7 @@ export default {
       box-sizing: border-box;
       position: absolute;
       display: block;
-      right: -100%;
+      right: -50%;
       z-index: 100;
       transition: 0.75s right;
     }

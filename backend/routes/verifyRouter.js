@@ -28,10 +28,10 @@ router.post('/api/verify/register', async (req, res) => {
         // 建立 token
         const token = uuidv4();
     
-        // 插入新使用者
+        // 插入新使用者 level 1 為一般用戶、 level 2 為管理員
         await db.execute(
-            'INSERT INTO User (token, account, password, email) VALUES (?, ?, ?, ?)',
-            [token, account, password, email]
+            'INSERT INTO User (token, account, password, email, level) VALUES (?, ?, ?, ?, ?)',
+            [token, account, password, email, 1]
         );
     
         return res.send({
@@ -83,7 +83,16 @@ router.post('/api/verify/login', async (req, res) => {
             sameSite: 'Strict',
             secure: false
         });
-    
+        res.cookie('x-user-info', {
+            account: user.account,
+            level: user.level,
+        }, 
+        {
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: 'Strict',
+            secure: false
+        });
+
         return res.send({
             type: 'success',
             msg: '登入成功'

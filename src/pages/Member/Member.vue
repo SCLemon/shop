@@ -11,6 +11,7 @@ export default {
     methods:{
         logout(){
             jsCookie.remove('x-user-token');
+            jsCookie.remove('x-user-info');
             this.$bus.$emit('toggleTop','logout');
             this.$router.push('/index').catch(e=>{});
         }
@@ -22,6 +23,5 @@ export default {
     .main{
         width:100vw;
         height: calc(100vh - 140px);
-
     }
 </style>

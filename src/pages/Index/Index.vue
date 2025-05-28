@@ -1,6 +1,20 @@
 <template>
   <div class="List">
+    <div class="List_item List_add" v-if="userInfo && userInfo.level == 2">
+      <div><i class="fa-solid fa-plus"></i></div>
+    </div>
     <div class="List_item">
+      <div class="dropdown" v-if="userInfo && userInfo.level == 2">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>編輯</el-dropdown-item>
+            <el-dropdown-item>刪除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
       <div class="List_item_img">
         <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
           <el-carousel-item v-for="item in 4" :key="item">
@@ -131,16 +145,23 @@
 
 <script>
 import axios from 'axios';
-
+import jsCookie from 'js-cookie';
 export default {
   name:'Main',
   data(){
     return {
-      text:''
+      text:'',
+      userInfo: {}
     }
   },
   mounted(){
-
+    const info = jsCookie.get('x-user-info')
+    if(info){
+      const jsonPart = info.slice(info.indexOf('{'));
+      const obj = JSON.parse(jsonPart);
+      this.userInfo = obj
+      console.log(this.userInfo)
+    }
   }
 }
 </script>
@@ -203,7 +224,7 @@ export default {
   .List_item_icon{
     position: absolute;
     bottom:12px;
-    right: 6px;
+    right: 3px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -213,6 +234,18 @@ export default {
   .List_item_icon>i:hover{
     cursor: pointer;
     color:rgba(0,0,0,1);
+  }
+  .dropdown{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index:99;
+  }
+  .List_add{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
   }
   ::v-deep .el-carousel{
     overflow-y: hidden;

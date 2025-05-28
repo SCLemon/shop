@@ -152,6 +152,7 @@ export default {
     gap: 15px;
     overflow-y: scroll;
     padding: 15px;
+    margin-top: 10px;
   }
   .List_item{
     height: 275px;
@@ -225,6 +226,7 @@ export default {
     .List{
       grid-template-columns: repeat(auto-fit, 175px);
       justify-content: center;
+      margin-top: 5px;
     }
   }
 

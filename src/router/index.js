@@ -7,8 +7,12 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
         {
-            path:'/',
+            path:'/index',
             component:Index
+        },
+        {
+            path:'/',
+            redirect:'/index'
         },
     ]
 })

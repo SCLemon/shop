@@ -2,7 +2,7 @@
   <div id="app">
     <!-- pc -->
     <div class="top">
-      <div class="logo">
+      <div class="logo" @click="goTo('/index')">
         <img src="img/logo_expand.png" alt="">
       </div>
       <div class="search">
@@ -10,18 +10,18 @@
         <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
       </div>
       <div class="top_item_box">
-        <div class="top_item">購物首頁</div>
-        <div class="top_item" v-if="0">登入 | 註冊</div>
+        <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('/index')">購物首頁</div>
+        <div :class="`top_item ${$route.path.includes('/login')?'top_item_current_page':''}`" v-if="0"  @click="goTo('/login')">登入 | 註冊</div>
         <template v-if="1">
-          <div class="top_item">會員中心</div>
-          <div class="top_item">購物列表</div>
+          <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('/member')">會員中心</div>
+          <div :class="`top_item ${$route.path.includes('/cart')?'top_item_current_page':''}`"  @click="goTo('/cart')">購物列表</div>
         </template>
       </div>
     </div>
 
     <!-- mobile -->
     <div class="top_mobile_box">
-      <div class="logo_mobile">
+      <div class="logo_mobile"  @click="goTo('/index')">
         <img src="img/logo.png" alt="">
       </div>
       <div class="search_mobile">
@@ -31,11 +31,11 @@
       <div class="top_mobile" ref="top_mobile" @click="toggleMobileList()"><i class="fa-solid fa-bars"></i></div>
     </div>
     <div class="top_mobile_list" ref="top_mobile_list">
-      <div class="top_mobile_list_item">購物首頁</div>
-      <div class="top_mobile_list_item" v-if="0">登入 | 註冊</div>
+      <div class="top_mobile_list_item"  @click="goTo('/index')">購物首頁</div>
+      <div class="top_mobile_list_item" v-if="0"  @click="goTo('/login')">登入 | 註冊</div>
       <template v-if="1">
-        <div class="top_mobile_list_item">會員中心</div>
-        <div class="top_mobile_list_item">購物列表</div>
+        <div class="top_mobile_list_item"  @click="goTo('/member')">會員中心</div>
+        <div class="top_mobile_list_item"  @click="goTo('/cart')">購物列表</div>
       </template>
     </div>
     <router-view class="view"></router-view>
@@ -52,6 +52,9 @@ export default {
     }
   },
   methods:{
+    goTo(path){
+      this.$router.push(path).catch(e=>{});
+    },
     toggleMobileList(){
       this.mobile_list_open = !this.mobile_list_open;
       this.$refs['top_mobile'].classList.toggle('top_mobile_open')
@@ -85,6 +88,9 @@ export default {
   max-width: 100%;
   max-height: 60px;
   object-fit: contain;
+}
+.logo:hover{
+  cursor: pointer;
 }
 /* search */
 .search{
@@ -123,8 +129,10 @@ export default {
 }
 .top_item:hover{
   cursor: pointer;
-  background: black;
-  color: white;
+  border-bottom: 2px solid chocolate;
+}
+.top_item_current_page{
+  border-bottom: 2px solid chocolate;
 }
 /* 500px */
 .top_mobile_box{
@@ -160,6 +168,9 @@ export default {
     max-width: 100%;
     max-height: 60px;
     object-fit: contain;
+  }
+  .logo_mobile:hover{
+    cursor: pointer;
   }
   /* search */
   .search_mobile{

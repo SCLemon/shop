@@ -114,6 +114,12 @@ export default {
     .login_btn{
         margin-top: 20px;
         width: 100%;
+        background: rgb(216, 113, 38);
+        border: 1px solid chocolate;
+    }
+    .login_btn:hover{
+        background: chocolate;
+        border: 1px solid chocolate;
     }
     .forget{
         line-height: 2;

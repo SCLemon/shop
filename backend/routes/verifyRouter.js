@@ -11,7 +11,7 @@ router.post('/api/verify/register', async (req, res) => {
     if (!account || !password || !email) {
         return res.send({
             type: 'error',
-            msg: '缺少必要欄位'
+            msg: '資料不可為空'
         });
     }
   
@@ -56,7 +56,7 @@ router.post('/api/verify/login', async (req, res) => {
     if (!account || !password) {
         return res.send({
             type: 'error',
-            msg: '缺少必要欄位'
+            msg: '資料不可為空'
         });
     }
 

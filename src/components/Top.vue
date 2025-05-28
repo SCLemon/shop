@@ -11,10 +11,10 @@
         </div>
         <div class="top_item_box">
           <div :class="`top_item ${$route.path.includes('/index')?'top_item_current_page':''}`" @click="goTo('1','/index')">購物首頁</div>
-          <div :class="`top_item ${$route.path.includes('/verify')?'top_item_current_page':''}`" v-if="!0"  @click="goTo('1','/verify')">登入 | 註冊</div>
-          <template v-if="0">
-            <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
+          <div :class="`top_item ${$route.path.includes('/verify')?'top_item_current_page':''}`" v-if="!isLogin"  @click="goTo('1','/verify')">登入 | 註冊</div>
+          <template v-else>
             <div :class="`top_item ${$route.path.includes('/cart')?'top_item_current_page':''}`"  @click="goTo('1','/cart')">購物列表</div>
+            <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
           </template>
         </div>
       </div>
@@ -32,22 +32,28 @@
     </div>
     <div class="top_mobile_list" ref="top_mobile_list">
       <div class="top_mobile_list_item"  @click="goTo('2','/index')">購物首頁</div>
-      <div class="top_mobile_list_item" v-if="1"  @click="goTo('2','/verify')">登入 | 註冊</div>
-      <template v-if="0">
-        <div class="top_mobile_list_item"  @click="goTo('2','/member')">會員中心</div>
+      <div class="top_mobile_list_item" v-if="!isLogin"  @click="goTo('2','/verify')">登入 | 註冊</div>
+      <template v-else>
         <div class="top_mobile_list_item"  @click="goTo('2','/cart')">購物列表</div>
+        <div class="top_mobile_list_item"  @click="goTo('2','/member')">會員中心</div>
       </template>
     </div>
   </div>
 </template>
 
 <script>
+import jsCookie from 'js-cookie'
 export default {
     name:'Top',
     data(){
         return {
-        mobile_list_open:false
+          isLogin:false,
+          mobile_list_open:false
         }
+    },
+    mounted(){
+      this.$bus.$on('toggleTop', this.toggleTop)
+      this.checkIsLogin();
     },
     methods:{
         goTo(type,path){
@@ -63,6 +69,16 @@ export default {
           this.mobile_list_open = !this.mobile_list_open;
           this.$refs['top_mobile'].classList.toggle('top_mobile_open')
           this.$refs['top_mobile_list'].classList.toggle('top_mobile_list_open')
+        },
+        // 登入或登出時，調整 Top 顯示項目
+        toggleTop(type){
+          if(type == 'login') this.isLogin = true;
+          else if(type == 'logout') this.isLogin = false
+        },
+        // 預渲染列表顯示
+        checkIsLogin(){
+          const token = jsCookie.get('x-user-token')
+          if(token && token.trim()!='') this.isLogin = true;
         }
     }
 }

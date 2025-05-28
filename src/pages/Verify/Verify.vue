@@ -44,15 +44,34 @@ export default {
             else if(this.type == 2) this.register();
         },
         async login(){
-
+            try{
+                const res = await axios.post('/api/verify/login',{
+                    account:this.account,
+                    password: this.password
+                });
+                if(res.data.type == 'success'){
+                    this.$router.push('/index').catch((e)=>{})
+                    this.$bus.$emit('toggleTop','login')
+                }
+                else this.$bus.$emit('handleAlert','登入通知',res.data.msg,res.data.type)
+            }
+            catch(e){
+                this.$bus.$emit('handleAlert','系統異常通知','請洽客服人員','error')
+            }
         },
         async register(){
-           const res = await axios.post('/api/verify/register',{
-                email:this.email,
-                account:this.account,
-                password: this.password
-           });
-           console.log(res.data)
+            try{
+                const res = await axios.post('/api/verify/register',{
+                    email:this.email,
+                    account:this.account,
+                    password: this.password
+                });
+                this.$bus.$emit('handleAlert','註冊通知',res.data.msg,res.data.type)
+                if(res.data.type == 'success') this.type = 1;
+            }
+            catch(e){
+                this.$bus.$emit('handleAlert','系統異常通知','請洽客服人員','error')
+            }
         }
     }
 }

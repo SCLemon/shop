@@ -13,6 +13,18 @@ export default {
   name: 'App',
   components:{
     Top, Footer
+  },
+  mounted(){
+    this.$bus.$on('handleAlert',this.handleAlert)
+  },
+  methods:{
+    handleAlert(title,msg,type){
+      this.$notify({
+          title: title,
+          message: msg,
+          type: type
+      });
+    }
   }
 }
 </script>

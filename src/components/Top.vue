@@ -65,7 +65,7 @@ export default {
 <style scoped>
 .top{
   width:100%;
-  height: 60px;
+  height: 70px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-evenly;
@@ -78,7 +78,7 @@ export default {
 }
 .logo>img{
   max-width: 100%;
-  max-height: 60px;
+  max-height: 70px;
   object-fit: contain;
 }
 .logo:hover{
@@ -110,10 +110,10 @@ export default {
 }
 /* 選單 */
 .top_item_box{
-  height: 60px;
+  height: 70px;
   width: auto;
   display: flex;
-  line-height: 60px;
+  line-height: 70px;
 }
 .top_item{
   width: 120px;
@@ -134,13 +134,6 @@ export default {
   display: none;
 }
 
-/* view */
-.view{
-  width: 100vw;
-  height: calc(100vh - 60px);
-  box-sizing: border-box;
-}
-
 @media (max-width: 760px) {
   .top{
     display: none;
@@ -150,15 +143,15 @@ export default {
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    height: 60px;
+    height: 70px;
   }
   .logo_mobile{
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
   }
   .logo_mobile>img{
     max-width: 100%;
-    max-height: 60px;
+    max-height: 70px;
     object-fit: contain;
   }
   .logo_mobile:hover{
@@ -190,8 +183,8 @@ export default {
   }
 
   .top_mobile{
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     font-size: 24px;
     line-height: 60px;
     text-align: center;
@@ -209,6 +202,7 @@ export default {
     display: block;
     opacity: 0;
     transition: 0.3s opacity;
+    position: absolute;
   }
 
   .top_mobile_list_open{
@@ -217,8 +211,8 @@ export default {
 
   .top_mobile_list_item{
     width: 100%;
-    height: 60px;
-    line-height: 60px;
+    height: 70px;
+    line-height: 70px;
     text-align: center;
     background-color: rgba(0,0,0,0.8);
     color: white;

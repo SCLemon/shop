@@ -31,7 +31,7 @@ export default {
 <style scoped>
     .main{
         width: 100vw;
-        height: calc(100vh - 140px);
+        height: calc(100vh - 150px);
     }
     .step{
         margin-top: 10px;

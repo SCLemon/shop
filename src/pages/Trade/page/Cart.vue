@@ -81,12 +81,12 @@ export default {
 <style scoped>
     .main{
         width: 100vw;
-        height: calc(100vh - 196px);
+        height: calc(100vh - 206px);
         overflow-y: scroll;
     }
     .list{
         width: 95vw;
-        height: calc((100vh - 196px) / 4);
+        height: calc((100vh - 206px) / 4);
         margin: 0 auto;
         display: flex;
         justify-content: space-evenly;

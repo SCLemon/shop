@@ -69,8 +69,13 @@ export default {
   },
   methods:{
     openDialog(product_uuid){
+      const token = jsCookie.get('x-user-token');
+      if(!token || token.trim()==''){
+        this.$bus.$emit('handleAlert','請先登入後再加入購物車。','error')
+        this.$router.push('/verify')
+        return
+      }
       this.dialogVisible = true;
-      console.log(product_uuid)
       this.addToCartProduct.product_uuid = product_uuid;
     },
     handleDialogClose(){
@@ -102,12 +107,13 @@ export default {
           }
         );
         this.$bus.$emit('handleAlert','購物車通知',res.data.msg,res.data.type)
-        if(res.data.type == 'success' && res.data.redirect){
+        if (res.data.type == 'success'){
           this.addToCartProduct = {
             uuid:'',
             quantity:1
           }
-          this.$router.push(res.data.redirect)
+          this.dialogVisible = false;
+          if(res.data.redirect) this.$router.push(res.data.redirect)
         }
       }
       catch(e){

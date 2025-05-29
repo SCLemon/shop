@@ -60,7 +60,7 @@ export default {
           jsCookie.remove('x-user-token');
           jsCookie.remove('x-user-info');
           this.toggleTop('logout');
-          this.$router.push('/index').catch(e=>{});
+          this.$router.push('/verify').catch(e=>{});
           location.reload();
         },
         goTo(type,path){

@@ -3,6 +3,10 @@ import VueRouter from 'vue-router'
 
 import Index from '../pages/Index/Index.vue'
 import Verify from '../pages/Verify/Verify.vue'
+import Trade from '../pages/Trade/Trade.vue'
+import Cart from '../pages/Trade/page/Cart.vue'
+import Transaction from '../pages/Trade/page/Transaction.vue'
+import Finish from '../pages/Trade/page/Finish.vue'
 import jsCookie from 'js-cookie'
 Vue.use(VueRouter)
 const router = new VueRouter({
@@ -14,6 +18,28 @@ const router = new VueRouter({
         {
             path:'/verify',
             component:Verify
+        },
+        {
+            path:'/trade',
+            component:Trade,
+            children:[
+                {
+                    path:'cart',
+                    component: Cart
+                },
+                {
+                    path:'transaction',
+                    component: Transaction
+                },
+                {
+                    path:'finish',
+                    component: Finish
+                },
+                {
+                    path:'',
+                    redirect:'cart'
+                }
+            ]
         },
         {
             path:'/',

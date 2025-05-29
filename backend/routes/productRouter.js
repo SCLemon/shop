@@ -80,7 +80,7 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
   
     try {
       // 寫入資料庫
-      await db.execute(`INSERT INTO product (uuid, name, detail, price, remaining, src) VALUES (?, ?, ?, ?, ?, ?)`, [idx, name, detail, price, remaining, JSON.stringify(src)]);
+      await db.execute(`INSERT INTO Product (uuid, name, detail, price, remaining, src) VALUES (?, ?, ?, ?, ?, ?)`, [idx, name, detail, price, remaining, JSON.stringify(src)]);
   
       return res.send({ type: 'success', msg: '商品新增成功' });
     } 
@@ -93,7 +93,7 @@ router.post('/api/product/add', upload.fields([{ name: 'attachments' }]), authMi
 // 獲取資料
 router.get('/api/product/get',async(req,res)=>{
   try {
-    const [rows] = await db.execute('SELECT * FROM product ORDER BY id DESC');
+    const [rows] = await db.execute('SELECT * FROM Product ORDER BY id DESC');
     res.send({
       type: 'success',
       data: rows
@@ -129,7 +129,7 @@ router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
 
   try {
 
-    const [rows] = await db.execute('SELECT src FROM product WHERE uuid = ?', [uuid]);
+    const [rows] = await db.execute('SELECT src FROM Product WHERE uuid = ?', [uuid]);
 
     if (rows.length === 0) {
       return res.send({ type: 'error', msg: '商品刪除失敗' });
@@ -143,7 +143,7 @@ router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
 
-    await db.execute('DELETE FROM product WHERE uuid = ?', [uuid]);
+    await db.execute('DELETE FROM Product WHERE uuid = ?', [uuid]);
     return res.send({ type: 'success', msg: '商品刪除成功' });
   }
   catch(e){
@@ -160,7 +160,7 @@ router.put('/api/product/revise/:uuid', upload.fields([{ name: 'attachments' }])
 
   try {
     // 查詢原有商品資料
-    const [rows] = await db.execute('SELECT * FROM product WHERE uuid = ?', [uuid]);
+    const [rows] = await db.execute('SELECT * FROM Product WHERE uuid = ?', [uuid]);
     if (rows.length === 0) {
       return res.send({ type: 'error', msg: '找不到該商品' });
     }
@@ -192,7 +192,7 @@ router.put('/api/product/revise/:uuid', upload.fields([{ name: 'attachments' }])
 
     // 更新資料庫內容
     await db.execute(
-      'UPDATE product SET name = ?, detail = ?, price = ?, remaining = ?, src = ? WHERE uuid = ?',
+      'UPDATE Product SET name = ?, detail = ?, price = ?, remaining = ?, src = ? WHERE uuid = ?',
       [name, detail, price, remaining, JSON.stringify(newSrc), uuid]
     );
 

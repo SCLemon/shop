@@ -102,4 +102,32 @@ router.put('/api/cart/update/quantity', async (req, res) => {
         return res.send({ type: 'error', msg: '系統錯誤，無法更新商品數量' });
     }
 });
+
+// 刪除購物商品
+router.delete('/api/cart/delete/:trade_id', async (req, res) => {
+    const token = req.headers['x-user-token'];
+    const { trade_id } = req.params;
+
+    // 檢查欄位
+    if (!token || !trade_id ) {
+        return res.send({ type: 'error', msg: '商品刪除失敗' });
+    }
+
+    try {
+        const [result] = await db.execute(`
+            DELETE FROM Cart_Item
+            WHERE token = ? AND trade_id = ?
+        `, [token, trade_id]);
+
+        if (result.affectedRows === 0) {
+            return res.send({ type: 'error', msg: '找不到對應的購物車項目' });
+        }
+
+        return res.send({ type: 'success', msg: '商品刪除成功' });
+    } catch (err) {
+        console.error('更新失敗:', err);
+        return res.send({ type: 'error', msg: '系統錯誤，無法刪除商品' });
+    }
+});
+
 module.exports = router;

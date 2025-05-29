@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="添加至購物車" :visible.sync="dialogVisible" width="30%" :before-close="handleDialogClose">
+    <el-dialog title="添加至購物車" :visible.sync="dialogVisible" :before-close="handleDialogClose">
       <el-input-number class="quantity" v-model="addToCartProduct.quantity" :min="1" label="描述文字"></el-input-number>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -217,6 +217,11 @@ export default {
 
   .quantity{
     width: 100%;
+  }
+
+  ::v-deep .el-dialog{
+    width:90% !important;
+    max-width: 432px;
   }
 
   @media (max-width: 420px){

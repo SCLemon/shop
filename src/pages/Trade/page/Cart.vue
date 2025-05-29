@@ -16,7 +16,7 @@
             <div class="list_bottom">
                 <div class="list_price">
                     ${{ obj.price }}
-                    <i class="el-icon-delete trash"></i>
+                    <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
                 </div>
                 <div class="list_bottom_right">
                     <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
@@ -60,13 +60,29 @@ export default {
         },
         async handleChange(trade_id, quantity){
             try{
-                const res = axios.put('/api/cart/update/quantity',{
+                const res = await axios.put('/api/cart/update/quantity',{
                     trade_id, quantity
                 },{
                     headers:{
                         'x-user-token':jsCookie.get('x-user-token')
                     }
                 })
+            }
+            catch(e){
+                this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+            }
+        },
+        async removeItem(trade_id){
+            try{
+                const res = await axios.delete(`/api/cart/delete/${trade_id}`,{
+                    headers:{
+                        'x-user-token':jsCookie.get('x-user-token')
+                    }
+                })
+                if(res.data.type == 'success'){
+                    this.getData();
+                }
+                else this.$bus.$emit('handleAlert','購物車資訊通知',res.data.msg, res.data.type)
             }
             catch(e){
                 this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')

@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 
 import Index from '../pages/Index/Index.vue'
 import Verify from '../pages/Verify/Verify.vue'
-import Member from '@/pages/Member/Member.vue'
 import jsCookie from 'js-cookie'
 Vue.use(VueRouter)
 const router = new VueRouter({
@@ -15,10 +14,6 @@ const router = new VueRouter({
         {
             path:'/verify',
             component:Verify
-        },
-        {
-            path:'/member',
-            component:Member
         },
         {
             path:'/',

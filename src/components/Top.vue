@@ -14,7 +14,7 @@
           <div :class="`top_item ${$route.path.includes('/verify')?'top_item_current_page':''}`" v-if="!isLogin"  @click="goTo('1','/verify')">登入 | 註冊</div>
           <template v-else>
             <div :class="`top_item ${$route.path.includes('/trade')?'top_item_current_page':''}`"  @click="goTo('1','/trade')">交易列表</div>
-            <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="goTo('1','/member')">會員中心</div>
+            <div :class="`top_item ${$route.path.includes('/member')?'top_item_current_page':''}`"  @click="logout()">登出</div>
           </template>
         </div>
       </div>
@@ -35,7 +35,7 @@
       <div class="top_mobile_list_item" v-if="!isLogin"  @click="goTo('2','/verify')">登入 | 註冊</div>
       <template v-else>
         <div class="top_mobile_list_item"  @click="goTo('2','/trade')">交易列表</div>
-        <div class="top_mobile_list_item"  @click="goTo('2','/member')">會員中心</div>
+        <div class="top_mobile_list_item"  @click="logout()">登出</div>
       </template>
     </div>
   </div>
@@ -56,6 +56,13 @@ export default {
       this.checkIsLogin();
     },
     methods:{
+        logout(){
+          jsCookie.remove('x-user-token');
+          jsCookie.remove('x-user-info');
+          this.toggleTop('logout');
+          this.$router.push('/index').catch(e=>{});
+          location.reload();
+        },
         goTo(type,path){
           if(type == 1){
             this.$router.push(path).catch(e=>{});

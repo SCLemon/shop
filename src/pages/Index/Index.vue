@@ -21,8 +21,7 @@
           ${{ obj.price }}
         </div>
         <div class="List_item_icon">
-          <i title="直接購買" class="fa-solid fa-credit-card"></i>
-          <i title="加入購物車" class="fa-solid fa-cart-shopping"></i>
+          <i title="加入購物車" class="fa-solid fa-cart-shopping" @click="addToCart(obj.uuid)"></i>
         </div>
       </div>
     </div>
@@ -64,6 +63,24 @@ export default {
           this.list = res.data.data;
         }
         else this.$bus.$emit('handleAlert','資料獲取通知',res.data.msg,res.data.type)
+      }
+      catch(e){
+        this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+      }
+    },
+    async addToCart(product_uuid){
+      try{
+        const res = await axios.post('/api/cart/add',{
+            quantity:1, product_uuid
+          },
+          {
+            headers:{
+              'x-user-token':jsCookie.get('x-user-token')
+            }
+          }
+        );
+        this.$bus.$emit('handleAlert','購物車通知',res.data.msg,res.data.type)
+        if(res.data.redirect) this.$router.push(res.data.redirect)
       }
       catch(e){
         this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
@@ -139,11 +156,11 @@ export default {
   .List_item_icon{
     position: absolute;
     bottom:12px;
-    right: 0px;
+    right: 2.5px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    width: 60px;
+    width: 30px;
     color:rgba(0,0,0,0.7);
   }
   .List_item_icon>i:hover{

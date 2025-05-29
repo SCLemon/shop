@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-dialog title="添加至購物車" :visible.sync="dialogVisible" width="30%" :before-close="handleDialogClose">
+      <el-input-number class="quantity" v-model="addToCartProduct.quantity" :min="1" label="描述文字"></el-input-number>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="addToCart()">確定</el-button>
+      </span>
+    </el-dialog>
     <div class="List">
       <Upload v-if="userInfo && userInfo.level == 2"></Upload>
       <div class="List_item" v-for="(obj,id) in list" :key="id">
@@ -21,7 +28,7 @@
           ${{ obj.price }}
         </div>
         <div class="List_item_icon">
-          <i title="加入購物車" class="fa-solid fa-cart-shopping" @click="addToCart(obj.uuid)"></i>
+          <i title="加入購物車" class="fa-solid fa-cart-shopping" @click="openDialog(obj.uuid)"></i>
         </div>
       </div>
     </div>
@@ -40,7 +47,12 @@ export default {
   },
   data(){
     return {
+      dialogVisible:false,
       text:'',
+      addToCartProduct:{
+        product_uuid:'',
+        quantity:1
+      },
       userInfo: {},
       list:[]
     }
@@ -56,6 +68,18 @@ export default {
     }
   },
   methods:{
+    openDialog(product_uuid){
+      this.dialogVisible = true;
+      console.log(product_uuid)
+      this.addToCartProduct.product_uuid = product_uuid;
+    },
+    handleDialogClose(){
+      this.dialogVisible = false;
+      this.addToCartProduct = {
+        uuid:'',
+        quantity:1
+      }
+    },
     async getData(){
       try{
         const res = await axios.get('/api/product/get');
@@ -68,11 +92,9 @@ export default {
         this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
       }
     },
-    async addToCart(product_uuid){
+    async addToCart(){
       try{
-        const res = await axios.post('/api/cart/add',{
-            quantity:1, product_uuid
-          },
+        const res = await axios.post('/api/cart/add',this.addToCartProduct,
           {
             headers:{
               'x-user-token':jsCookie.get('x-user-token')
@@ -80,7 +102,13 @@ export default {
           }
         );
         this.$bus.$emit('handleAlert','購物車通知',res.data.msg,res.data.type)
-        if(res.data.redirect) this.$router.push(res.data.redirect)
+        if(res.data.type == 'success' && res.data.redirect){
+          this.addToCartProduct = {
+            uuid:'',
+            quantity:1
+          }
+          this.$router.push(res.data.redirect)
+        }
       }
       catch(e){
         this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
@@ -181,6 +209,9 @@ export default {
     display: none;
   }
 
+  .quantity{
+    width: 100%;
+  }
 
   @media (max-width: 420px){
     .List{

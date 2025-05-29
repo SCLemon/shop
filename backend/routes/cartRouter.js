@@ -40,29 +40,25 @@ router.post('/api/cart/add', async (req, res) => {
 // 獲取購物車信息
 router.get('/api/cart/items', async (req, res) => {
     const token = req.headers['x-user-token'];
-    const status = req.query.status;
     if (!token) {
       return res.send({ type: 'error', msg: '請先登入再查看購物車。' });
     }
   
     try {
-      // 取得該 token 的購物車商品資料
-      // JOIN product 表以取得商品詳細資訊
       const [rows] = await db.execute(`
         SELECT
           ci.id,
           ci.trade_id,
           ci.product_uuid,
           ci.quantity,
-          ci.status,
           p.name,
           p.price,
           p.detail,
           p.src
         FROM Cart_Item ci
         JOIN product p ON ci.product_uuid = p.uuid
-        WHERE ci.token = ? AND ci.status = ?
-      `, [token, status]);
+        WHERE ci.token = ?
+      `, [token]);
   
       res.json({
         type: 'success',
@@ -71,6 +67,39 @@ router.get('/api/cart/items', async (req, res) => {
     } catch (error) {
       console.error(error);
       res.send({ type: 'error', msg: '系統異常錯誤，請洽客服人員。' });
+    }
+});
+
+// 更新購物車商品數量
+router.put('/api/cart/update/quantity', async (req, res) => {
+    const token = req.headers['x-user-token'];
+    const { trade_id, quantity } = req.body;
+
+    // 檢查欄位
+    if (!token || !trade_id || quantity === undefined) {
+        return res.send({ type: 'error', msg: '商品數量更新失敗' });
+    }
+
+    const qty = parseInt(quantity);
+    if (isNaN(qty) || qty < 1) {
+        return res.send({ type: 'error', msg: '商品數量必須為數字且大於等於1' });
+    }
+
+    try {
+        const [result] = await db.execute(`
+            UPDATE Cart_Item
+            SET quantity = ?
+            WHERE token = ? AND trade_id = ?
+        `, [qty, token, trade_id]);
+
+        if (result.affectedRows === 0) {
+            return res.send({ type: 'error', msg: '找不到對應的購物車項目' });
+        }
+
+        return res.send({ type: 'success', msg: '商品數量已更新' });
+    } catch (err) {
+        console.error('更新失敗:', err);
+        return res.send({ type: 'error', msg: '系統錯誤，無法更新商品數量' });
     }
 });
 module.exports = router;

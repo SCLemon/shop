@@ -5,7 +5,6 @@ CREATE TABLE Cart_Item (
   trade_id VARCHAR(50) NOT NULL,
   product_uuid VARCHAR(50) NOT NULL,
   quantity INT NOT NULL DEFAULT 1,
-  status INT NOT NULL DEFAULT 1,
   FOREIGN KEY (token) REFERENCES cart(token) ON DELETE CASCADE,
   FOREIGN KEY (product_uuid) REFERENCES product(uuid) ON DELETE CASCADE
 );

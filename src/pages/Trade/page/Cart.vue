@@ -19,7 +19,7 @@
                     <i class="el-icon-delete trash"></i>
                 </div>
                 <div class="list_bottom_right">
-                    <el-input-number v-model="obj.quantity" @change="handleChange" :min="1" label="描述文字"></el-input-number>
+                    <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
                     <el-button type="primary" class="list_bottom_btn">立即付款</el-button>
                 </div>
             </div>
@@ -35,32 +35,16 @@ export default {
     name:'Cart',
     data(){
         return {
-            status:1,
             list:[]
         }
     },
     mounted(){
         this.getData();
-        /*
-            {
-                "id": 7,
-                "trade_id": "3cabe842-cff1-489d-8235-ad09c5c1ba9a",
-                "product_uuid": "e1ccf1e0-37ea-40ac-b5ca-b89257fea4ce",
-                "quantity": 1,
-                "status": 1,
-                "name": "MySQL 版本太低，不支援 JSON  你用的 ORM 或資料庫驅動不支援自動解析 JSON 欄位  你在 Node.js 拿到的 p.src 是字串（JSON 格式的字串）",
-                "price": 1999,
-                "detail": "MySQL 版本太低，不支援 JSON  你用的 ORM 或資料庫驅動不支援自動解析 JSON 欄位  你在 Node.js 拿到的 p.src 是字串（JSON 格式的字串），需用 JSON.parse(p.src) 轉成物件再用  SQL 語法錯誤，導致查詢失敗",
-                "src": [
-                    "1829ad9c-feec-4711-be33-533959b39ea0.png"
-                ]
-            }
-        */
     },
     methods:{
         async getData(){
             try{
-                const res = await axios.get(`/api/cart/items?status=${this.status}`,{
+                const res = await axios.get(`/api/cart/items`,{
                     headers:{
                         'x-user-token':jsCookie.get('x-user-token')
                     }
@@ -72,6 +56,20 @@ export default {
             }
             catch(e){
                 his.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+            }
+        },
+        async handleChange(trade_id, quantity){
+            try{
+                const res = axios.put('/api/cart/update/quantity',{
+                    trade_id, quantity
+                },{
+                    headers:{
+                        'x-user-token':jsCookie.get('x-user-token')
+                    }
+                })
+            }
+            catch(e){
+                this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
             }
         }
     }
@@ -160,5 +158,8 @@ export default {
     }
     .trash:hover{
         cursor: pointer;
+    }
+    @media (max-width: 600px){
+
     }
 </style>

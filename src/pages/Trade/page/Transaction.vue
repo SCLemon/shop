@@ -19,8 +19,19 @@
                         ${{ obj.total_amount }}
                     </div>
                     <div class="list_bottom_right">
-                        <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
-                        <el-button type="primary" class="list_bottom_btn" @click="pay(obj.trade_id)">立即付款</el-button>
+                        <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)" v-if="obj.status == '未付款'"></i>
+                        <template v-if="userInfo.level == 1">
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款'" @click="pay(obj.trade_id)">立即付款</el-button>
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '確認中'" disabled>付款確認中</el-button>
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已付款'" disabled>商品處理中</el-button>
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨'" @click="finishOrder(obj.trade_id)">完成訂單</el-button>
+                        </template>
+                        <template v-if="userInfo.level == 2">
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款'" @click="pay(obj.trade_id)">立即付款</el-button>
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '確認中'" @click="checkPay(obj.trade_id)">確認已付款</el-button>
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已付款'" @click="shipping(obj.trade_id)">進行發貨</el-button>
+                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨'" @click="finishOrder(obj.trade_id)" :disabled="userInfo.token != obj.token">完成訂單</el-button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -35,16 +46,30 @@
       name:'Transaction',
       data(){
           return {
-              list:[]
+                list:[],
+                userInfo:{}
           }
       },
       mounted(){
-          this.getData();
+            const info = jsCookie.get('x-user-info')
+            const token = jsCookie.get('x-user-token')
+            if(info && token){
+                const jsonPart = info.slice(info.indexOf('{'));
+                const obj = JSON.parse(jsonPart);
+                this.userInfo = obj
+                this.userInfo.token = token;
+            }
+            else{
+                this.$router.push('/verify').catch(e=>{})
+                this.$bus.$emit('handleAlert','購物車資訊通知','請先登入再查看購物車','error')
+            }
+            this.getData();
       },
       methods:{
             async getData(){
                 try{
-                    const res = await axios.get(`/api/transaction/info`,{
+                    let url = this.userInfo.level == 1? '/api/transaction/info':this.userInfo.level == 2?'/api/transaction/infoByManager':''
+                    const res = await axios.get(url,{
                         headers:{
                             'x-user-token':jsCookie.get('x-user-token')
                         }
@@ -60,14 +85,47 @@
             },
             async pay(trade_id){
                 try{
-                    const res = await axios.put('/api/cart/transaction/pay',{
+                    const res = await axios.put('/api/transaction/pay',{
                         trade_id
                     },{
                         headers:{
                             'x-user-token':jsCookie.get('x-user-token')
                         }
                     })
-                    if(res.data.type != 'success') this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
+                    this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
+                    this.getData();
+                }
+                catch(e){
+                    this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+                }
+            },
+            async checkPay(trade_id){
+                try{
+                    const res = await axios.put('/api/transaction/check',{
+                        trade_id
+                    },{
+                        headers:{
+                            'x-user-token':jsCookie.get('x-user-token')
+                        }
+                    })
+                    this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
+                    this.getData();
+                }
+                catch(e){
+                    this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+                }
+            },
+            async shipping(trade_id){
+                try{
+                    const res = await axios.put('/api/transaction/shipping',{
+                        trade_id
+                    },{
+                        headers:{
+                            'x-user-token':jsCookie.get('x-user-token')
+                        }
+                    })
+                    this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
+                    this.getData();
                 }
                 catch(e){
                     this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
@@ -88,7 +146,24 @@
                 catch(e){
                     this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
                 }
-            }
+            },
+            async finishOrder(trade_id){
+                try{
+                    const res = await axios.put('/api/transaction/finish',{
+                        trade_id
+                    },{
+                        headers:{
+                            'x-user-token':jsCookie.get('x-user-token')
+                        }
+                    })
+                    this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
+                    this.getData();
+                }
+                catch(e){
+                    this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+                }
+            },
+
       }
   }
   </script>

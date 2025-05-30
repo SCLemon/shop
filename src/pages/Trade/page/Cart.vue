@@ -16,7 +16,7 @@
             <el-input-number class="mobile_right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
             <div class="list_bottom">
                 <div class="list_price">
-                    ${{ obj.price }}
+                    ${{ obj.price * obj.quantity }}
                     <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
                 </div>
                 <div class="list_bottom_right">

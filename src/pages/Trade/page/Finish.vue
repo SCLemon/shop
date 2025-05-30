@@ -19,7 +19,7 @@
                         ${{ obj.total_amount }}
                     </div>
                     <div class="list_bottom_right">
-                        <el-button type="primary" class="list_bottom_btn" @click="addToCart(obj.product_uuid)">再次購買</el-button>
+                        <el-button type="primary" class="list_bottom_btn" @click="addToCart(obj.product_uuid)" v-if="userInfo.token == obj.token">再次購買</el-button>
                     </div>
                 </div>
             </div>
@@ -34,16 +34,30 @@
       name:'Finish',
       data(){
           return {
-              list:[]
+              list:[],
+              userInfo:{}
           }
       },
       mounted(){
-          this.getData();
+            const info = jsCookie.get('x-user-info')
+            const token = jsCookie.get('x-user-token')
+            if(info && token){
+                const jsonPart = info.slice(info.indexOf('{'));
+                const obj = JSON.parse(jsonPart);
+                this.userInfo = obj
+                this.userInfo.token = token;
+            }
+            else{
+                this.$router.push('/verify').catch(e=>{})
+                this.$bus.$emit('handleAlert','購物車資訊通知','請先登入再查看購物車','error')
+            }
+            this.getData();
       },
       methods:{
             async getData(){
                 try{
-                    const res = await axios.get(`/api/finish/info`,{
+                    let url = this.userInfo.level == 1? '/api/finish/info':this.userInfo.level == 2?'/api/finish/infoByManager':''
+                    const res = await axios.get(url,{
                         headers:{
                             'x-user-token':jsCookie.get('x-user-token')
                         }

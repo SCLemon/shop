@@ -142,14 +142,14 @@ router.get('/api/transaction/info', async (req, res) => {
 });
 
 
-// 刪除訂單
+// 取消訂單
 router.delete('/api/transaction/delete/:trade_id', async (req, res) => {
     const token = req.headers['x-user-token'];
     const { trade_id } = req.params;
 
     // 檢查欄位
     if (!token || !trade_id ) {
-        return res.send({ type: 'error', msg: '商品刪除失敗' });
+        return res.send({ type: 'error', msg: '訂單取消失敗' });
     }
 
     // 先獲得 Order_item 中的 quantity, product_uuid
@@ -163,27 +163,19 @@ router.delete('/api/transaction/delete/:trade_id', async (req, res) => {
 
 
     try {
-        const [result] = await db.execute(`
-            DELETE FROM Order_item
-            WHERE token = ? AND trade_id = ?
-        `, [token, trade_id]);
-
-        if (result.affectedRows === 0) {
-            return res.send({ type: 'error', msg: '找不到對應的訂單項目' });
-        }
         
         await db.execute(
             `UPDATE \`Order\` SET status = ? WHERE trade_id = ?`,
-            ['已刪除', trade_id]
+            ['已取消', trade_id]
         );
         
         // 回補 product 的數量
         await db.execute(`UPDATE Product SET remaining = remaining + ? WHERE uuid = ?`, [quantity,product_uuid]);
 
-        return res.send({ type: 'success', msg: '訂單刪除成功' });
+        return res.send({ type: 'success', msg: '訂單取消成功' });
     } catch (err) {
         console.error('更新失敗:', err);
-        return res.send({ type: 'error', msg: '系統錯誤，無法刪除訂單' });
+        return res.send({ type: 'error', msg: '系統錯誤，無法取消訂單' });
     }
 });
 

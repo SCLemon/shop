@@ -81,7 +81,7 @@ export default {
     handleDialogClose(){
       this.dialogVisible = false;
       this.addToCartProduct = {
-        uuid:'',
+        product_uuid:'',
         quantity:1
       }
     },

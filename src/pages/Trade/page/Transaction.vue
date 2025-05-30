@@ -110,8 +110,8 @@
           position: relative;
       }
       .label{
-        height: 20px;
-        line-height: 20px;
+        height: 22.5px;
+        line-height: 22.5px;
         position: absolute;
         top:0;
         left:0;

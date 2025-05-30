@@ -49,6 +49,10 @@ app.use(cartRouter);
 const transactionRouter = require('./routes/transactionRouter');
 app.use(transactionRouter);
 
+// finish router
+const finishRouter = require('./routes/finishRouter');
+app.use(finishRouter);
+
 app.listen(3007,()=>{
     console.log('server is running on port 3007')
 })

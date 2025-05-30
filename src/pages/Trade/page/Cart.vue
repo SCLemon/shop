@@ -20,7 +20,7 @@
                 </div>
                 <div class="list_bottom_right">
                     <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
-                    <el-button type="primary" class="list_bottom_btn">立即付款</el-button>
+                    <el-button type="primary" class="list_bottom_btn">立即下單</el-button>
                 </div>
             </div>
         </div>
@@ -67,6 +67,7 @@ export default {
                         'x-user-token':jsCookie.get('x-user-token')
                     }
                 })
+                if(res.data.type != 'success') this.$bus.$emit('handleAlert','訂單更新通知',res.data.msg, res.data.type)
             }
             catch(e){
                 this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')

@@ -220,8 +220,7 @@ export default {
   }
 
   ::v-deep .el-dialog{
-    width:90% !important;
-    max-width: 432px;
+    min-width: 355px;
   }
 
   @media (max-width: 420px){

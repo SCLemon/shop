@@ -2,9 +2,9 @@
   <div class="main">
     <div class="step">
         <el-steps :active="step" simple>
-            <el-step title="未結帳" class="step_item" icon="el-icon-edit" @click.native="goToStep('/trade/cart',1)"></el-step>
+            <el-step title="購物車" class="step_item" icon="el-icon-shopping-cart-1" @click.native="goToStep('/trade/cart',1)"></el-step>
             <el-step title="交易中" class="step_item" icon="el-icon-loading" @click.native="goToStep('/trade/transaction',2)"></el-step>
-            <el-step title="已付款" class="step_item" icon="el-icon-check" @click.native="goToStep('/trade/finish',3)"></el-step>
+            <el-step title="已完成" class="step_item" icon="el-icon-check" @click.native="goToStep('/trade/finish',3)"></el-step>
         </el-steps>
     </div>
     <router-view></router-view>

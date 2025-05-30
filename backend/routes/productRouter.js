@@ -145,7 +145,7 @@ router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
 
     await db.execute(
       `UPDATE \`Order\` SET status = ? WHERE trade_id IN ( SELECT trade_id FROM Order_Item WHERE product_uuid = ?)`,
-      ['已刪除', uuid]
+      ['已下架', uuid]
     );
     
     await db.execute('DELETE FROM Product WHERE uuid = ?', [uuid]);

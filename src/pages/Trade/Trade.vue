@@ -16,8 +16,19 @@ export default {
     name:'Trade',
     data(){
         return {
-            step:1,
+            
         }
+    },
+    computed:{
+        step(){
+            const path = this.$route.path
+            if(path.includes('cart')) return 1
+            else if(path.includes('transaction')) return 2
+            else if(path.includes('finish')) return 3
+        }
+    },
+    mounted(){
+        console.log(this.$route.path)
     },
     methods:{
         goToStep(path,step){

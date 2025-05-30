@@ -79,42 +79,71 @@ router.post('/api/transaction/add', async (req, res) => {
 });
 
 
-// 獲取購物車信息
-router.get('/api/cart/items', async (req, res) => {
+// 獲取訂單
+router.get('/api/transaction/info', async (req, res) => {
+
     const token = req.headers['x-user-token'];
+  
     if (!token) {
-      return res.send({ type: 'error', msg: '請先登入再查看購物車。' });
+        return res.send({ type: 'error', msg: '請先登入再查看訂單。' });
     }
   
     try {
-      const [rows] = await db.execute(`
-        SELECT
-          ci.id,
-          ci.trade_id,
-          ci.product_uuid,
-          ci.quantity,
-          p.name,
-          p.price,
-          p.detail,
-          p.src
-        FROM Cart_Item ci
-        JOIN product p ON ci.product_uuid = p.uuid
-        WHERE ci.token = ?
-      `, [token]);
-  
-      res.json({
-        type: 'success',
-        data: rows
-      });
-    } catch (error) {
-      console.error(error);
-      res.send({ type: 'error', msg: '系統異常錯誤，請洽客服人員。' });
+        // 1. 取得該用戶的所有訂單（Order）
+        const [orders] = await db.execute(
+            `SELECT * FROM \`Order\` WHERE token = ? ORDER BY created_at DESC`,
+            [token]
+        );
+        
+        // 2. 對每筆訂單，查詢對應的訂單項目（Order_Item）與商品資訊（Product）
+        const statuses = ['未付款','待確認','已確認','發貨中'];
+        const placeholders = statuses.map(() => '?').join(',');
+
+        const results = [];
+
+        for (let order of orders) {
+        const [items] = await db.execute(
+            `SELECT 
+                OI.quantity,
+                P.name AS product_name,
+                P.detail AS product_detail,
+                P.src AS product_image,
+                P.uuid AS product_uuid
+                FROM Order_Item OI
+                JOIN Product P ON OI.product_uuid = P.uuid
+                JOIN \`Order\` O ON O.trade_id = OI.trade_id AND O.token = OI.token
+                WHERE OI.trade_id = ? AND OI.token = ? AND O.status IN (${placeholders})`,
+            [order.trade_id, token, ...statuses]
+        );
+
+        for (let item of items) {
+            results.push({
+                order_id: order.id,
+                token: order.token,
+                trade_id: order.trade_id,
+                total_amount: order.total_amount,
+                status: order.status,
+                created_at: order.created_at,
+                quantity: item.quantity,
+                product_name: item.product_name,
+                product_detail: item.product_detail,
+                product_image: item.product_image,
+                product_uuid: item.product_uuid
+            });
+        }
+    }
+
+    res.send({ type: 'success', data: results });
+
+    } catch (err) {
+      console.error(err);
+      res.send({ type: 'error', msg: '伺服器錯誤，無法獲取訂單。' });
     }
 });
 
 
-// 刪除購物商品
-router.delete('/api/cart/delete/:trade_id', async (req, res) => {
+// 刪除訂單
+router.delete('/api/transaction/delete/:trade_id', async (req, res) => {
     const token = req.headers['x-user-token'];
     const { trade_id } = req.params;
 
@@ -123,20 +152,38 @@ router.delete('/api/cart/delete/:trade_id', async (req, res) => {
         return res.send({ type: 'error', msg: '商品刪除失敗' });
     }
 
+    // 先獲得 Order_item 中的 quantity, product_uuid
+    const [items] = await db.execute(`SELECT product_uuid, quantity FROM Order_Item WHERE token = ? AND trade_id = ?`, [token, trade_id]);
+
+    if (items.length === 0) {
+        return res.send({ type: 'error', msg: '找不到對應的訂單項目' });
+    }
+
+    const {product_uuid , quantity} = items[0];
+
+
     try {
         const [result] = await db.execute(`
-            DELETE FROM Cart_Item
+            DELETE FROM Order_item
             WHERE token = ? AND trade_id = ?
         `, [token, trade_id]);
 
         if (result.affectedRows === 0) {
-            return res.send({ type: 'error', msg: '找不到對應的購物車項目' });
+            return res.send({ type: 'error', msg: '找不到對應的訂單項目' });
         }
+        
+        await db.execute(
+            `UPDATE \`Order\` SET status = ? WHERE trade_id = ?`,
+            ['已刪除', trade_id]
+        );
+        
+        // 回補 product 的數量
+        await db.execute(`UPDATE Product SET remaining = remaining + ? WHERE uuid = ?`, [quantity,product_uuid]);
 
-        return res.send({ type: 'success', msg: '商品刪除成功' });
+        return res.send({ type: 'success', msg: '訂單刪除成功' });
     } catch (err) {
         console.error('更新失敗:', err);
-        return res.send({ type: 'error', msg: '系統錯誤，無法刪除商品' });
+        return res.send({ type: 'error', msg: '系統錯誤，無法刪除訂單' });
     }
 });
 

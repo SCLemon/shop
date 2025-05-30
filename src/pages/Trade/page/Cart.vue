@@ -43,7 +43,7 @@ export default {
         }
     },
     mounted(){
-        this.getData();
+        this.getData();      
     },
     methods:{
         async getData(){
@@ -105,6 +105,7 @@ export default {
                 this.$bus.$emit('handleAlert','商品下單通知',res.data.msg, res.data.type)
                 if(res.data.type == 'success'){
                     this.getData(); 
+                    this.$router.push('/trade/transaction').catch(e=>{})
                 }
             }
             catch(e){

@@ -48,7 +48,8 @@
       data(){
           return {
                 list:[],
-                userInfo:{}
+                userInfo:{},
+                timer:-1,
           }
       },
       mounted(){
@@ -65,6 +66,9 @@
                 this.$bus.$emit('handleAlert','購物車資訊通知','請先登入再查看購物車','error')
             }
             this.getData();
+            this.timer = setInterval(() => {
+                this.getData();
+            }, 3000);  
       },
       methods:{
             async getData(){
@@ -159,12 +163,16 @@
                     })
                     this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
                     this.getData();
+                    if(res.data.type == 'success') this.$router.push('/trade/finish').catch(e=>{})
                 }
                 catch(e){
                     this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
                 }
             },
 
+      },
+      beforeDestroy(){
+        clearInterval(this.timer)
       }
   }
   </script>

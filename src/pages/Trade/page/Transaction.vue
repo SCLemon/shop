@@ -27,10 +27,10 @@
                                 <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨'" @click="finishOrder(obj.trade_id)">完成訂單</el-button>
                             </template>
                             <template v-if="userInfo.level == 2">
-                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款' && userInfo.token != obj.token" @click="pay(obj.trade_id)" :disabled="userInfo.token != obj.token">立即付款</el-button>
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款' && userInfo.token == obj.token" @click="pay(obj.trade_id)" :disabled="userInfo.token != obj.token">立即付款</el-button>
                                 <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '確認中'" @click="checkPay(obj.trade_id)">確認已付款</el-button>
                                 <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已付款'" @click="shipping(obj.trade_id)">進行發貨</el-button>
-                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨' && userInfo.token != obj.token" @click="finishOrder(obj.trade_id)" :disabled="userInfo.token != obj.token">完成訂單</el-button>
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨' && userInfo.token == obj.token" @click="finishOrder(obj.trade_id)" :disabled="userInfo.token != obj.token">完成訂單</el-button>
                             </template>
                         </div>
                     </div>

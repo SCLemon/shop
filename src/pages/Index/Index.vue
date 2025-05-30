@@ -71,8 +71,8 @@ export default {
     openDialog(product_uuid){
       const token = jsCookie.get('x-user-token');
       if(!token || token.trim()==''){
-        this.$bus.$emit('handleAlert','請先登入後再加入購物車。','error')
-        this.$router.push('/verify')
+        this.$bus.$emit('handleAlert','系統提示','請先登入後再加入購物車。','error')
+        this.$router.push('/verify').catch(e=>{})
         return
       }
       this.dialogVisible = true;

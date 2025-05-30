@@ -80,10 +80,10 @@
                             'x-user-token':jsCookie.get('x-user-token')
                         }
                     })
+                    this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
                     if(res.data.type == 'success'){
                         this.getData();
                     }
-                    else this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
                 }
                 catch(e){
                     this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')

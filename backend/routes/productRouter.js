@@ -143,7 +143,14 @@ router.delete('/api/product/remove/:uuid', authMiddleWare, async(req,res)=>{
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
 
+    await db.execute(
+      `UPDATE \`Order\` SET status = ? WHERE trade_id IN ( SELECT trade_id FROM Order_Item WHERE product_uuid = ?)`,
+      ['已刪除', uuid]
+    );
+    
     await db.execute('DELETE FROM Product WHERE uuid = ?', [uuid]);
+
+
     return res.send({ type: 'success', msg: '商品刪除成功' });
   }
   catch(e){

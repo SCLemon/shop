@@ -21,7 +21,7 @@
                 </div>
                 <div class="list_bottom_right">
                     <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
-                    <el-button type="primary" class="list_bottom_btn">立即下單</el-button>
+                    <el-button type="primary" class="list_bottom_btn" @click="purchase(obj.trade_id, obj.product_uuid)">立即下單</el-button>
                 </div>
             </div>
         </div>
@@ -90,6 +90,24 @@ export default {
                 this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
             }
         },
+        async purchase(trade_id, product_uuid){
+            try{
+                const res = await axios.post('/api/transaction/add',{
+                    trade_id, product_uuid
+                },{
+                    headers:{
+                        'x-user-token':jsCookie.get('x-user-token')
+                    }
+                })
+                this.$bus.$emit('handleAlert','商品下單通知',res.data.msg, res.data.type)
+                if(res.data.type == 'success'){
+                    this.getData(); 
+                }
+            }
+            catch(e){
+                this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+            }
+        }
     }
 }
 </script>

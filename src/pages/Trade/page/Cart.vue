@@ -102,7 +102,7 @@ export default {
     }
     .list{
         width: 95vw;
-        height: calc((100vh - 206px) / 4);
+        height: calc((100vh - 216px) / 4);
         margin: 0 auto;
         display: flex;
         justify-content: space-evenly;

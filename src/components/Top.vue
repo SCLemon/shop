@@ -6,7 +6,7 @@
           <img src="img/logo_expand.png" alt="">
         </div>
         <div class="search">
-          <input type="text" placeholder="想買什麼？這裡找！" class="search_input">
+          <input type="text" placeholder="想買什麼？這裡找！" class="search_input" v-model="q">
           <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
         </div>
         <div class="top_item_box">
@@ -25,7 +25,7 @@
         <img src="img/logo.png" alt="">
       </div>
       <div class="search_mobile">
-        <input type="text" placeholder="想買什麼？這裡找！" class="search_mobile_input">
+        <input type="text" placeholder="想買什麼？這裡找！" class="search_mobile_input" v-model="q">
         <div class="search_mobile_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
       </div>
       <div class="top_mobile" ref="top_mobile" @click="toggleMobileList()"><i class="fa-solid fa-bars"></i></div>
@@ -47,13 +47,22 @@ export default {
     name:'Top',
     data(){
         return {
+          q:'',
           isLogin:false,
-          mobile_list_open:false
+          mobile_list_open:false,
         }
     },
     mounted(){
       this.$bus.$on('toggleTop', this.toggleTop)
+      this.$bus.$on('clearQuery', this.clearQuery)
       this.checkIsLogin();
+    },
+    watch:{
+      q:{
+        handler(){
+          this.$bus.$emit('handleQuery',this.q)
+        }
+      }
     },
     methods:{
         logout(){

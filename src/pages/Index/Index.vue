@@ -7,31 +7,34 @@
         <el-button type="primary" @click="addToCart()">確定</el-button>
       </span>
     </el-dialog>
-    <div class="List">
-      <Upload v-if="userInfo && userInfo.level == 2"></Upload>
-      <div class="List_item" v-for="(obj,id) in list" :key="id">
-        <Dropdown v-if="userInfo && userInfo.level == 2" :idx="obj.uuid" :item="obj"></Dropdown>
-        <div class="List_item_img">
-          <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-            <el-carousel-item v-for="item in obj.src" :key="item">
-              <div class="img_box">
-                <img :src="`/api/img/download/${item}`" alt="">
-              </div>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-        <div class="List_item_title">
-          {{ obj.name }}
-        </div>
-        <div class="List_item_remaining">剩餘 {{ obj.remaining }} 件</div>
-        <div class="List_item_price">
-          ${{ obj.price }}
-        </div>
-        <div class="List_item_icon">
-          <i title="加入購物車" class="fa-solid fa-cart-shopping" @click="openDialog(obj.uuid)"></i>
-        </div>
+    <el-empty v-if="!showList.length" description="查無此商品" class="empty"></el-empty>
+    <template v-else>
+        <div class="List">
+          <Upload v-if="userInfo && userInfo.level == 2"></Upload>
+          <div class="List_item" v-for="(obj,id) in showList" :key="id">
+            <Dropdown v-if="userInfo && userInfo.level == 2" :idx="obj.uuid" :item="obj"></Dropdown>
+            <div class="List_item_img">
+              <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
+                <el-carousel-item v-for="item in obj.src" :key="item">
+                  <div class="img_box">
+                    <img :src="`/api/img/download/${item}`" alt="">
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+            </div>
+            <div class="List_item_title">
+              {{ obj.name }}
+            </div>
+            <div class="List_item_remaining">剩餘 {{ obj.remaining }} 件</div>
+            <div class="List_item_price">
+              ${{ obj.price }}
+            </div>
+            <div class="List_item_icon">
+              <i title="加入購物車" class="fa-solid fa-cart-shopping" @click="openDialog(obj.uuid)"></i>
+            </div>
+          </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -47,6 +50,7 @@ export default {
   },
   data(){
     return {
+      q:'',
       dialogVisible:false,
       text:'',
       addToCartProduct:{
@@ -58,6 +62,7 @@ export default {
     }
   },
   mounted(){
+    this.$bus.$on('handleQuery', this.handleQuery)
     this.$bus.$on('refreshProduct',this.getData)
     this.getData();
     const info = jsCookie.get('x-user-info')
@@ -67,7 +72,15 @@ export default {
       this.userInfo = obj
     }
   },
+  computed:{
+    showList(){
+      return this.list.filter(item => item.name.includes(this.q))
+    }
+  },
   methods:{
+    handleQuery(q){
+      this.q = q;
+    },
     openDialog(product_uuid){
       const token = jsCookie.get('x-user-token');
       if(!token || token.trim()==''){
@@ -89,7 +102,7 @@ export default {
       try{
         const res = await axios.get('/api/product/get');
         if(res.data.type == 'success'){
-          this.list = res.data.data;
+          this.list = res.data.data.filter((item)=> item.name.includes(this.q));
         }
         else this.$bus.$emit('handleAlert','資料獲取通知',res.data.msg,res.data.type)
       }
@@ -233,5 +246,9 @@ export default {
     .List{
       grid-template-columns: repeat(auto-fit, 165px);
     }
+  }
+  .empty{
+    width: 100vw;
+    height: calc(100vh - 140px);
   }
 </style>

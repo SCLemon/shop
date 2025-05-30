@@ -34,72 +34,72 @@
   import axios from 'axios';
   import jsCookie from 'js-cookie';
   export default {
-      name:'Finish',
-      data(){
-          return {
-              list:[],
-              userInfo:{},
-              timer:-1,
-          }
-      },
-      mounted(){
-            const info = jsCookie.get('x-user-info')
-            const token = jsCookie.get('x-user-token')
-            if(info && token){
-                const jsonPart = info.slice(info.indexOf('{'));
-                const obj = JSON.parse(jsonPart);
-                this.userInfo = obj
-                this.userInfo.token = token;
+        name:'Finish',
+        data(){
+            return {
+                list:[],
+                userInfo:{},
+                timer:-1,
             }
-            else{
-                this.$router.push('/verify').catch(e=>{})
-                this.$bus.$emit('handleAlert','購物車資訊通知','請先登入再查看購物車','error')
-            }
-            this.getData();
-            this.timer = setInterval(() => {
+        },
+        mounted(){
+                const info = jsCookie.get('x-user-info')
+                const token = jsCookie.get('x-user-token')
+                if(info && token){
+                    const jsonPart = info.slice(info.indexOf('{'));
+                    const obj = JSON.parse(jsonPart);
+                    this.userInfo = obj
+                    this.userInfo.token = token;
+                }
+                else{
+                    this.$router.push('/verify').catch(e=>{})
+                    this.$bus.$emit('handleAlert','購物車資訊通知','請先登入再查看購物車','error')
+                }
                 this.getData();
-            }, 3000);
-      },
-      methods:{
-            async getData(){
-                try{
-                    let url = this.userInfo.level == 1? '/api/finish/info':this.userInfo.level == 2?'/api/finish/infoByManager':''
-                    const res = await axios.get(url,{
-                        headers:{
+                this.timer = setInterval(() => {
+                    this.getData();
+                }, 3000);
+        },
+        methods:{
+                async getData(){
+                    try{
+                        let url = this.userInfo.level == 1? '/api/finish/info':this.userInfo.level == 2?'/api/finish/infoByManager':''
+                        const res = await axios.get(url,{
+                            headers:{
+                                'x-user-token':jsCookie.get('x-user-token')
+                            }
+                        })
+                        if(res.data.type == 'success'){
+                            this.list = res.data.data;
+                        }
+                        else this.$bus.$emit('handleAlert','購物車資訊通知',res.data.msg, res.data.type)
+                    }
+                    catch(e){
+                        this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
+                    }
+                },
+                async addToCart(uuid){
+                    try{
+                        const res = await axios.post('/api/cart/add',{
+                            product_uuid: uuid, quantity:1
+                        },
+                        {
+                            headers:{
                             'x-user-token':jsCookie.get('x-user-token')
+                            }
                         }
-                    })
-                    if(res.data.type == 'success'){
-                        this.list = res.data.data;
+                        );
+                        this.$bus.$emit('handleAlert','重新下單通知',res.data.msg,res.data.type)
+                        if(res.data.type == 'success') this.$router.push('/trade/cart').catch(e=>{})
                     }
-                    else this.$bus.$emit('handleAlert','購物車資訊通知',res.data.msg, res.data.type)
-                }
-                catch(e){
-                    this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
-                }
-            },
-            async addToCart(uuid){
-                try{
-                    const res = await axios.post('/api/cart/add',{
-                        product_uuid: uuid, quantity:1
-                    },
-                    {
-                        headers:{
-                        'x-user-token':jsCookie.get('x-user-token')
-                        }
+                    catch(e){
+                        this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
                     }
-                    );
-                    this.$bus.$emit('handleAlert','重新下單通知',res.data.msg,res.data.type)
-                    if(res.data.type == 'success') this.$router.push('/trade/cart').catch(e=>{})
                 }
-                catch(e){
-                    this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
-                }
-            }
-      },
-      beforeDestroy(){
-        clearInterval(this.timer)
-      }
+        },
+        beforeDestroy(){
+            clearInterval(this.timer)
+        }
   }
   </script>
   

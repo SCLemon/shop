@@ -13,6 +13,7 @@
         <div class="list_content">
             <div class="list_title">{{ obj.name }}</div>
             <div class="list_detail">{{ obj.detail }}</div>
+            <el-input-number class="mobile_right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
             <div class="list_bottom">
                 <div class="list_price">
                     ${{ obj.price }}
@@ -88,7 +89,7 @@ export default {
             catch(e){
                 this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
             }
-        }
+        },
     }
 }
 </script>
@@ -176,7 +177,20 @@ export default {
     .trash:hover{
         cursor: pointer;
     }
-    @media (max-width: 600px){
-
+    .mobile_right_quantity{
+        display: none;
+    }
+    @media (max-width: 570px){
+        .list_detail{
+            display: none;
+        }
+        .right_quantity{
+            display: none;
+        }
+        .mobile_right_quantity{
+            display: block;
+            position: absolute;
+            right: 0;
+        }
     }
 </style>

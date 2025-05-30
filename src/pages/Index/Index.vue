@@ -133,6 +133,9 @@ export default {
         this.$bus.$emit('handleAlert','系統異常通知','系統異常錯誤，請洽客服人員。','error')
       }
     }
+  },
+  beforeDestroy(){
+    this.$bus.$emit('clearQuery')
   }
 }
 </script>

@@ -1,31 +1,34 @@
 <template>
   <div class="main">
-    <div class="list" v-for="(obj,id) in list" :key="id">
-        <div class="list_img">
-            <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
-            <el-carousel-item v-for="item in obj.src" :key="item">
-              <div class="img_box">
-                <img :src="`/api/img/download/${item}`" alt="">
-              </div>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-        <div class="list_content">
-            <div class="list_title">{{ obj.name }}</div>
-            <div class="list_detail">{{ obj.detail }}</div>
-            <el-input-number class="mobile_right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
-            <div class="list_bottom">
-                <div class="list_price">
-                    ${{ obj.price * obj.quantity }}
-                    <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
+    <el-empty v-if="!list.length" description="暫無交易明細" class="empty"></el-empty>
+    <template v-else>
+        <div class="list" v-for="(obj,id) in list" :key="id">
+            <div class="list_img">
+                <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
+                <el-carousel-item v-for="item in obj.src" :key="item">
+                <div class="img_box">
+                    <img :src="`/api/img/download/${item}`" alt="">
                 </div>
-                <div class="list_bottom_right">
-                    <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
-                    <el-button type="primary" class="list_bottom_btn" @click="purchase(obj.trade_id, obj.product_uuid)">立即下單</el-button>
+                </el-carousel-item>
+            </el-carousel>
+            </div>
+            <div class="list_content">
+                <div class="list_title">{{ obj.name }}</div>
+                <div class="list_detail">{{ obj.detail }}</div>
+                <el-input-number class="mobile_right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
+                <div class="list_bottom">
+                    <div class="list_price">
+                        ${{ obj.price * obj.quantity }}
+                        <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
+                    </div>
+                    <div class="list_bottom_right">
+                        <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
+                        <el-button type="primary" class="list_bottom_btn" @click="purchase(obj.trade_id, obj.product_uuid)">立即下單</el-button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -210,5 +213,9 @@ export default {
             position: absolute;
             right: 0;
         }
+    }
+    .empty{
+        width: 100vw;
+        height: calc(100vh - 206px);
     }
 </style>

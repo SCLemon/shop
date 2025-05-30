@@ -1,39 +1,42 @@
 <template>
     <div class="main">
-      <div class="list" v-for="(obj,id) in list" :key="id">
-            <div class="label">{{ obj.status }}</div>
-            <div class="list_img">
-                <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
-                <el-carousel-item v-for="item in obj.product_image" :key="item">
-                    <div class="img_box">
-                    <img :src="`/api/img/download/${item}`" alt="">
-                    </div>
-                </el-carousel-item>
-                </el-carousel>
-            </div>
-            <div class="list_content">
-                <div class="list_title">{{ obj.product_name }}</div>
-                <div class="list_detail">{{ obj.product_detail }}</div>
-                <div class="list_bottom">
-                    <div class="list_price">
-                        ${{ obj.total_amount }}
-                    </div>
-                    <div class="list_bottom_right">
-                        <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)" v-if="obj.status == '未付款' && userInfo.token == obj.token"></i>
-                        <template v-if="userInfo.level == 1">
-                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款'" @click="pay(obj.trade_id)">立即付款</el-button>
-                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨'" @click="finishOrder(obj.trade_id)">完成訂單</el-button>
-                        </template>
-                        <template v-if="userInfo.level == 2">
-                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款' && userInfo.token != obj.token" @click="pay(obj.trade_id)" :disabled="userInfo.token != obj.token">立即付款</el-button>
-                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '確認中'" @click="checkPay(obj.trade_id)">確認已付款</el-button>
-                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已付款'" @click="shipping(obj.trade_id)">進行發貨</el-button>
-                            <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨' && userInfo.token != obj.token" @click="finishOrder(obj.trade_id)" :disabled="userInfo.token != obj.token">完成訂單</el-button>
-                        </template>
+        <el-empty v-if="!list.length" description="暫無交易明細" class="empty"></el-empty>
+        <template v-else>
+            <div class="list" v-for="(obj,id) in list" :key="id">
+                <div class="label">{{ obj.status }}</div>
+                <div class="list_img">
+                    <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
+                    <el-carousel-item v-for="item in obj.product_image" :key="item">
+                        <div class="img_box">
+                        <img :src="`/api/img/download/${item}`" alt="">
+                        </div>
+                    </el-carousel-item>
+                    </el-carousel>
+                </div>
+                <div class="list_content">
+                    <div class="list_title">{{ obj.product_name }}</div>
+                    <div class="list_detail">{{ obj.product_detail }}</div>
+                    <div class="list_bottom">
+                        <div class="list_price">
+                            ${{ obj.total_amount }}
+                        </div>
+                        <div class="list_bottom_right">
+                            <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)" v-if="obj.status == '未付款' && userInfo.token == obj.token"></i>
+                            <template v-if="userInfo.level == 1">
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款'" @click="pay(obj.trade_id)">立即付款</el-button>
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨'" @click="finishOrder(obj.trade_id)">完成訂單</el-button>
+                            </template>
+                            <template v-if="userInfo.level == 2">
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '未付款' && userInfo.token != obj.token" @click="pay(obj.trade_id)" :disabled="userInfo.token != obj.token">立即付款</el-button>
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '確認中'" @click="checkPay(obj.trade_id)">確認已付款</el-button>
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已付款'" @click="shipping(obj.trade_id)">進行發貨</el-button>
+                                <el-button type="primary" class="list_bottom_btn" v-if="obj.status == '已發貨' && userInfo.token != obj.token" @click="finishOrder(obj.trade_id)" :disabled="userInfo.token != obj.token">完成訂單</el-button>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>
-      </div>
+        </template>
     </div>
   </template>
   
@@ -265,5 +268,9 @@
       }
       .mobile_right_quantity{
           display: none;
+      }
+      .empty{
+        width: 100vw;
+        height: calc(100vh - 206px);
       }
   </style>

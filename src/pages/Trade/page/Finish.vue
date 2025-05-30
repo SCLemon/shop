@@ -1,29 +1,32 @@
 <template>
     <div class="main">
-      <div class="list" v-for="(obj,id) in list" :key="id">
-            <div class="label">{{ obj.status }}</div>
-            <div class="list_img">
-                <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
-                <el-carousel-item v-for="item in obj.product_image" :key="item">
-                    <div class="img_box">
-                    <img :src="`/api/img/download/${item}`" alt="">
-                    </div>
-                </el-carousel-item>
-                </el-carousel>
-            </div>
-            <div class="list_content">
-                <div class="list_title">{{ obj.product_name }}</div>
-                <div class="list_detail">{{ obj.product_detail }}</div>
-                <div class="list_bottom">
-                    <div class="list_price">
-                        ${{ obj.total_amount }}
-                    </div>
-                    <div class="list_bottom_right">
-                        <el-button type="primary" class="list_bottom_btn" @click="addToCart(obj.product_uuid)" v-if="userInfo.token == obj.token">再次購買</el-button>
+        <el-empty v-if="!list.length" description="暫無交易明細" class="empty"></el-empty>
+        <template v-else>
+            <div class="list" v-for="(obj,id) in list" :key="id">
+                <div class="label">{{ obj.status }}</div>
+                <div class="list_img">
+                    <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
+                    <el-carousel-item v-for="item in obj.product_image" :key="item">
+                        <div class="img_box">
+                        <img :src="`/api/img/download/${item}`" alt="">
+                        </div>
+                    </el-carousel-item>
+                    </el-carousel>
+                </div>
+                <div class="list_content">
+                    <div class="list_title">{{ obj.product_name }}</div>
+                    <div class="list_detail">{{ obj.product_detail }}</div>
+                    <div class="list_bottom">
+                        <div class="list_price">
+                            ${{ obj.total_amount }}
+                        </div>
+                        <div class="list_bottom_right">
+                            <el-button type="primary" class="list_bottom_btn" @click="addToCart(obj.product_uuid)" v-if="userInfo.token == obj.token">再次購買</el-button>
+                        </div>
                     </div>
                 </div>
             </div>
-      </div>
+        </template>
     </div>
   </template>
   
@@ -192,4 +195,8 @@
       .mobile_right_quantity{
           display: none;
       }
+      .empty{
+        width: 100vw;
+        height: calc(100vh - 206px);
+        }
   </style>

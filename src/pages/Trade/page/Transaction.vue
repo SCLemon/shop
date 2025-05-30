@@ -205,6 +205,7 @@
         border-radius: 0 0 7px 0;
         background: chocolate;
         color: white;
+        z-index: 101;
       }
       .list_img{
           width: 120px;

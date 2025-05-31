@@ -74,7 +74,7 @@ export default {
           jsCookie.remove('x-user-info');
           this.toggleTop('logout');
           this.$router.push('/verify').catch(e=>{});
-          location.reload();
+          // location.reload();
         },
         goTo(type,path){
           if(type == 1){

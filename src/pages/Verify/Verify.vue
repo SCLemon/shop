@@ -1,5 +1,16 @@
 <template>
   <div class="main">
+    <el-dialog title="忘記密碼" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="請輸入使用者帳號" :label-width="formLabelWidth">
+                <el-input v-model="form.account" autocomplete="off" placeholder="密碼將發送於註冊時的電子信箱"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+            <el-button type="primary" @click="forgetPassword()">確定</el-button>
+        </div>
+    </el-dialog>
     <div class="box">
         <div class="login_title">
             <span :class="`type ${type==1?'selected_type':''}`" @click="type = 1">登入</span>｜<span :class="`type ${type==2?'selected_type':''}`" @click="type = 2">註冊</span>
@@ -15,7 +26,7 @@
         <div class="login_info">
             <div class="subText">使用者密碼：</div>
             <el-input v-model="password" placeholder="請輸入密碼" show-password clearable></el-input>
-            <div class="forget" v-if="type == 1">忘記密碼？</div>
+            <div class="forget" v-if="type == 1" @click="dialogFormVisible = true">忘記密碼？</div>
         </div>
         <div class="login_info">
             <el-button type="primary" :loading="isLoading" @click="useMethod()" class="login_btn">{{ isLoading? '驗證中...' : type==1 ?'登入':'註冊' }}</el-button>
@@ -32,10 +43,14 @@ export default {
     data(){
         return {
             isLoading:false,
+            dialogFormVisible:false,
             type:1,
             email:'',
             account:'',
             password:'',
+            form:{
+                account:'',
+            }
         }
     },
     methods:{
@@ -68,6 +83,21 @@ export default {
                 });
                 this.$bus.$emit('handleAlert','註冊通知',res.data.msg,res.data.type)
                 if(res.data.type == 'success') this.type = 1;
+            }
+            catch(e){
+                this.$bus.$emit('handleAlert','系統異常通知','請洽客服人員','error')
+            }
+        },
+        async forgetPassword(){
+            try{
+                const res = await axios.post('/api/verify/forgetPassword',{
+                    account:this.form.account
+                });
+                this.$bus.$emit('handleAlert','密碼重發通知',res.data.msg,res.data.type)
+                if(res.data.type == 'success'){
+                    this.dialogFormVisible = false;
+                    this.form.account = '';
+                }
             }
             catch(e){
                 this.$bus.$emit('handleAlert','系統異常通知','請洽客服人員','error')
@@ -146,5 +176,9 @@ export default {
     }
     .selected_type{
         color: chocolate;
+    }
+    ::v-deep .el-dialog{
+        width: 95vw;
+        max-width: 720px;
     }
 </style>

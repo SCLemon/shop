@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const db = require('../db/db.js');
+const nodemailer = require('nodemailer');
 
 // 註冊 (token、帳號、密碼、電子信箱、基本信息(JSON))
 router.post('/api/verify/register', async (req, res) => {
@@ -108,6 +109,49 @@ router.post('/api/verify/login', async (req, res) => {
     }
 });
   
+
+// 重新發送密碼
+router.post('/api/verify/forgetPassword', async (req, res) => {
+    const {account} = req.body;
+  
+    if (!account) {
+        return res.send({
+            type: 'error',
+            msg: '密碼發送失敗。'
+        });
+    }
+
+    try {
+
+        const [rows] = await db.execute('SELECT * FROM User WHERE account = ?', [account]);
+        if (rows.length === 0) {
+            return res.send({
+                type: 'error',
+                msg: '密碼發送失敗。'
+            });
+        }
+    
+        const user = rows[0];
+        
+        sendMail(user.email, user.password)
+        
+        
+
+        return res.send({
+            type: 'success',
+            msg: '密碼已發送至電子信箱。'
+        });
+  
+    } 
+    catch (error) {
+        console.error('登入失敗:', error);
+        return res.send({
+            type: 'error',
+            msg: '密碼發送失敗。'
+        });
+    }
+});
+
 // token 驗證
 router.get('/api/verify/check', async (req, res) => {
     const token = req.headers['x-user-token'];
@@ -144,4 +188,29 @@ router.get('/api/verify/check', async (req, res) => {
     }
  });
   
+
+// 寄發信件
+const mailConfig ={
+    service: 'Gmail',
+    auth: {
+        user: 'sclemon1013@gmail.com', // Mail Account
+        pass: 'ajaoepncvpzenmey' // https://myaccount.google.com/apppasswords
+    }
+}
+
+function sendMail(email, password){
+    const transporter = nodemailer.createTransport(mailConfig)
+    var str = 
+    `
+    <div> 您於采均購物天堂的密碼為：${password}</div>
+    `
+    const mailOptions = {
+        from: '"采均購物天堂" <no-reply@gmail.com>',
+        to: email,
+        subject: '采均購物天堂 - 您的密碼已成功重新寄發',
+        html: str
+    }
+    transporter.sendMail(mailOptions, (err, info) => {})
+}
+
 module.exports = router;

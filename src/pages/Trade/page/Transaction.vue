@@ -146,6 +146,7 @@
                     this.$bus.$emit('handleAlert','訂單交易通知',res.data.msg, res.data.type)
                     if(res.data.type == 'success'){
                         this.getData();
+                        this.$router.push('/trade/finish').catch(e=>{})
                     }
                 }
                 catch(e){

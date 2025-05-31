@@ -22,7 +22,8 @@ export default {
       this.$notify({
           title: title,
           message: msg,
-          type: type
+          type: type,
+          duration:750,
       });
     }
   }

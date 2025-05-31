@@ -22,19 +22,40 @@
                 </el-carousel-item>
               </el-carousel>
             </div>
-            <div class="List_item_title">
-              {{ obj.name }}
-            </div>
-            <div class="List_item_remaining">剩餘 {{ obj.remaining }} 件</div>
-            <div class="List_item_price">
-              ${{ obj.price }}
+            <div @click="openDetail(obj)">
+              <div class="List_item_title">
+                {{ obj.name }}
+              </div>
+              <div class="List_item_remaining">剩餘 {{ obj.remaining }} 件</div>
+              <div class="List_item_price">
+                ${{ obj.price }}
+              </div>
             </div>
             <div class="List_item_icon">
               <i title="加入購物車" class="fa-solid fa-cart-shopping" @click="openDialog(obj.uuid)"></i>
             </div>
           </div>
-      </div>
+        </div>
     </template>
+
+    <el-dialog title="商品介紹" :visible.sync="detailTableVisible">
+      <el-carousel height="200px" :autoplay="false" trigger="click" :loop="false">
+        <el-carousel-item v-for="item in detailProduct.src" :key="item">
+          <div class="detail_img_box">
+            <img :src="`/api/img/download/${item}`" alt="">
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+      <div class="detail_1">
+        <div class="detail_1_title">{{ detailProduct.name }}</div>
+        <div class="detail_1_region">
+          <div class="detail_1_price">${{ detailProduct.price }}</div>
+          <div class="detail_1_remaining">剩餘 {{ detailProduct.remaining }} 件</div>
+        </div>
+      </div>
+      <div class="detail_2">{{ detailProduct.detail }}</div>
+      <div class="detail_3"><el-button type="primary" class="detail_3_btn" @click="openDialog(detailProduct.uuid)">加入購物車</el-button></div>
+    </el-dialog>
   </div>
 </template>
 
@@ -52,13 +73,17 @@ export default {
     return {
       q:'',
       dialogVisible:false,
+      detailTableVisible:false,
       text:'',
       addToCartProduct:{
         product_uuid:'',
         quantity:1
       },
       userInfo: {},
-      list:[]
+      list:[],
+      detailProduct:{
+
+      }
     }
   },
   mounted(){
@@ -80,6 +105,10 @@ export default {
   methods:{
     handleQuery(q){
       this.q = q;
+    },
+    openDetail(product){
+      this.detailTableVisible = true;
+      this.detailProduct = product
     },
     openDialog(product_uuid){
       const token = jsCookie.get('x-user-token');
@@ -235,6 +264,75 @@ export default {
     width: 100%;
   }
 
+  .detail_img_box{
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .detail_img_box img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .detail_1{
+    width: 100%;
+    margin-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+  }
+  .detail_1_title{
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: bolder;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    text-align: justify;
+  }
+
+  .detail_1_region{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+  .detail_1_price{
+    color: chocolate;
+  }
+  .detail_1_remaining{
+    margin-left: auto;
+  }
+  .detail_2{
+    width: 100%;
+    height: 150px;
+    overflow-y: scroll;
+    text-align: justify;
+    box-sizing: border-box;
+    margin-top: 5px;
+    border-top: 0.1px solid rgb(210,210,210);
+    padding: 8px;
+    line-height: 1.5;
+  }
+  .detail_3{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    margin-top: 15px;
+    align-items: center;
+  }
+  .detail_3_btn{
+    margin-left: auto;
+  }
   ::v-deep .el-dialog{
     min-width: 355px;
   }

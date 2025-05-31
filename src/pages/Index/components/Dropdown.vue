@@ -16,7 +16,7 @@
                 class="upload-demo" drag  action="#" multiple :auto-upload="false" accept="image/*" :on-change="handleChange" :file-list="upload.attachments">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">將文件拖到此處，或<em>點擊上傳</em></div>
-                <div class="el-upload__tip" slot="tip">修改資料時，請記得重新上傳原先的圖片。</div>
+                <div class="el-upload__tip" slot="tip">若需修改圖片，請記得重新上傳原先的圖片。</div>
             </el-upload>
             <div class="info">
                 <div class="info_title">商品名稱</div>

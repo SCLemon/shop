@@ -174,34 +174,42 @@ router.put('/api/product/revise/:uuid', upload.fields([{ name: 'attachments' }])
 
     const oldImages = rows[0].src
 
-    // 刪除舊圖片（從 ../uploadDB）
-    for (const filename of oldImages) {
-      const filePath = path.join(__dirname, '../uploadDB', filename);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    }
-
-    // 儲存新圖片
-    const newSrc = [];
-    for (const file of attachments) {
-      const fileUUID = uuidv4();
-      let mimeType = (file.originalname).split('.')[(file.originalname).split('.').length - 1]
-      const savePath = path.join(__dirname, '../uploadDB', `${fileUUID}.${mimeType}`);
-  
-      try {
-        fs.writeFileSync(savePath, file.buffer);
-        newSrc.push(`${fileUUID}.${mimeType}`);
-      } 
-      catch (err) {
-        console.error('儲存圖片失敗:', err);
-        return res.send({ type: 'error', msg: '新增商品失敗' });
+    if(attachments.length){
+      // 刪除舊圖片（從 ../uploadDB）
+      for (const filename of oldImages) {
+        const filePath = path.join(__dirname, '../uploadDB', filename);
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       }
-    }
 
-    // 更新資料庫內容
-    await db.execute(
-      'UPDATE Product SET name = ?, detail = ?, price = ?, remaining = ?, src = ? WHERE uuid = ?',
-      [name, detail, price, remaining, JSON.stringify(newSrc), uuid]
-    );
+      // 儲存新圖片
+      const newSrc = [];
+      for (const file of attachments) {
+        const fileUUID = uuidv4();
+        let mimeType = (file.originalname).split('.')[(file.originalname).split('.').length - 1]
+        const savePath = path.join(__dirname, '../uploadDB', `${fileUUID}.${mimeType}`);
+    
+        try {
+          fs.writeFileSync(savePath, file.buffer);
+          newSrc.push(`${fileUUID}.${mimeType}`);
+        } 
+        catch (err) {
+          console.error('儲存圖片失敗:', err);
+          return res.send({ type: 'error', msg: '新增商品失敗' });
+        }
+      }
+
+      // 更新資料庫內容
+      await db.execute(
+        'UPDATE Product SET name = ?, detail = ?, price = ?, remaining = ?, src = ? WHERE uuid = ?',
+        [name, detail, price, remaining, JSON.stringify(newSrc), uuid]
+      );
+    }
+    else {
+      await db.execute(
+        'UPDATE Product SET name = ?, detail = ?, price = ?, remaining = ? WHERE uuid = ?',
+        [name, detail, price, remaining, uuid]
+      );
+    }
 
     return res.send({ type: 'success', msg: '商品更新成功' });
   } catch (err) {

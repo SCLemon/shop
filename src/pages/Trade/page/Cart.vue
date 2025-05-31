@@ -21,7 +21,7 @@
                 </div>
                 <div class="list_bottom">
                     <div class="list_price">
-                        ${{ obj.price * obj.quantity }}
+                        ${{ obj.price }}
                         <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
                     </div>
                     <div class="list_bottom_right">

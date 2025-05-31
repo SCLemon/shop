@@ -7,7 +7,8 @@
         <el-button type="primary" @click="addToCart()">確定</el-button>
       </span>
     </el-dialog>
-    <template>
+    <el-empty v-if="(!showList.length && this.q !='') || (!showList.length && this.userInfo.level != 2)" description="暫無商品或查無此商品" class="empty"></el-empty>
+    <template v-else>
         <div class="List">
           <Upload v-if="userInfo && userInfo.level == 2"></Upload>
           <div class="List_item" v-for="(obj,id) in showList" :key="id">

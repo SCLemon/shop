@@ -6,7 +6,7 @@
           <img src="img/logo_expand.png" alt="">
         </div>
         <div class="search">
-          <input type="text" :placeholder="'想買什麼？這裡找！'" class="search_input" v-model="q" @input="handleSearch()">
+          <input type="text" :placeholder="'想買什麼？這裡找！'" class="search_input" v-model="q">
           <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
         </div>
         <div class="top_item_box">
@@ -25,7 +25,7 @@
         <img src="img/logo.png" alt="">
       </div>
       <div class="search_mobile">
-        <input type="text" placeholder="想買什麼？這裡找！" class="search_mobile_input" v-model="q" @input="handleSearch()">
+        <input type="text" placeholder="想買什麼？這裡找！" class="search_mobile_input" v-model="q">
         <div class="search_mobile_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
       </div>
       <div class="top_mobile" ref="top_mobile" @click="toggleMobileList()"><i class="fa-solid fa-bars"></i></div>

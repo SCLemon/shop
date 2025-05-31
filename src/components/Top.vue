@@ -112,6 +112,7 @@ export default {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    position: fixed;
   }
   /* logo */
   .logo{

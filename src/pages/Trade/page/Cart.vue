@@ -16,7 +16,7 @@
                 <div class="list_title">{{ obj.name }}</div>
                 <div class="list_detail">{{ obj.detail }}</div>
                 <div class="mobile_list_price">
-                        ${{ obj.price * obj.quantity }}
+                        ${{ obj.price }}
                         <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
                 </div>
                 <div class="list_bottom">
@@ -28,7 +28,7 @@
                         <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
                         <el-input-number class="mobile_right_quantity" size="small" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
                         <el-button type="primary" class="list_bottom_btn" @click="purchase(obj.trade_id, obj.product_uuid)">立即下單</el-button>
-                        <el-button type="primary" class="mobile_list_bottom_btn" icon="el-icon-edit" circle></el-button>
+                        <el-button type="primary" class="mobile_list_bottom_btn" icon="el-icon-shopping-cart-1"  @click="purchase(obj.trade_id, obj.product_uuid)" circle></el-button>
                     </div>
                 </div>
             </div>

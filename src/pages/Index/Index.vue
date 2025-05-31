@@ -288,7 +288,7 @@ export default {
   }
   .detail_1_title{
     font-size: 18px;
-    margin-top: 5px;
+    margin-top: 10px;
     line-height: 1.5;
     font-weight: bolder;
     display: -webkit-box;

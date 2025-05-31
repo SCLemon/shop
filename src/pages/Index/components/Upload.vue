@@ -14,7 +14,7 @@
             <div class="info">
                 <div class="info_title">商品介紹</div>
                 <el-input v-model="upload.detail" placeholder="請簡單介紹商品"></el-input>
-            </div>ㄋ
+            </div>
             <div class="numInfo">
                 <div class="numInfo_item">價格：<el-input-number class="numInfo_input" v-model="upload.price" controls-position="right" :min="0"></el-input-number></div>
                 <div class="numInfo_item">庫存：<el-input-number class="numInfo_input" v-model="upload.remaining" controls-position="right" :min="0"></el-input-number></div>

@@ -51,8 +51,9 @@ export default {
             formData.append('detail',this.upload.detail);
             formData.append('price',this.upload.price);
             formData.append('remaining',this.upload.remaining);
+
             for (let file of this.upload.attachments) {
-                formData.append('attachments', file); // 注意同個欄位名 append 多次
+                formData.append('attachments', file.raw); // 注意同個欄位名 append 多次
             }
 
             try{
@@ -84,7 +85,8 @@ export default {
             }
         },
         handleChange(file, fileList){
-            this.upload.attachments = fileList.map((item)=> item.raw)
+            fileList.forEach((i)=>{i.status = 'success'});
+            this.upload.attachments = fileList
         }
     }
 }

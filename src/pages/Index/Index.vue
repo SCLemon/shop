@@ -15,11 +15,20 @@
             <Dropdown v-if="userInfo && userInfo.level == 2" :idx="obj.uuid" :item="obj"></Dropdown>
             <div class="List_item_img">
               <el-carousel height="188px" :autoplay="false" trigger="click" :loop="false">
-                <el-carousel-item v-for="item in obj.src" :key="item">
-                  <div class="img_box">
-                    <img :src="`/api/img/download/${item}`" alt="">
-                  </div>
-                </el-carousel-item>
+                <template v-if="obj.src.length">
+                  <el-carousel-item v-for="item in obj.src" :key="item">
+                    <div class="img_box">
+                      <img :src="`/api/img/download/${item}`" alt="">
+                    </div>
+                  </el-carousel-item>
+                </template>
+                <template v-else>
+                  <el-carousel-item>
+                    <div class="img_box">
+                      <img :src="`img/logo_expand.png`" alt="">
+                    </div>
+                  </el-carousel-item>
+                </template>
               </el-carousel>
             </div>
             <div @click="openDetail(obj)">
@@ -131,7 +140,7 @@ export default {
       try{
         const res = await axios.get('/api/product/get');
         if(res.data.type == 'success'){
-          this.list = res.data.data.filter((item)=> item.name.includes(this.q));
+          this.list = res.data.data
         }
         else this.$bus.$emit('handleAlert','資料獲取通知',res.data.msg,res.data.type)
       }

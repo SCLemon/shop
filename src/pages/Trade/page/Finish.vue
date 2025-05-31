@@ -6,11 +6,20 @@
                 <div class="label">{{ obj.status }}</div>
                 <div class="list_img">
                     <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
-                    <el-carousel-item v-for="item in obj.product_image" :key="item">
-                        <div class="img_box">
-                        <img :src="`/api/img/download/${item}`" alt="">
-                        </div>
-                    </el-carousel-item>
+                        <template v-if="obj.product_image.length">
+                            <el-carousel-item v-for="item in obj.product_image" :key="item">
+                                <div class="img_box">
+                                    <img :src="`/api/img/download/${item}`" alt="">
+                                </div>
+                            </el-carousel-item>
+                        </template>
+                        <template v-else>
+                            <el-carousel-item>
+                                <div class="img_box">
+                                    <img :src="`img/logo_expand.png`" alt="">
+                                </div>
+                            </el-carousel-item>
+                        </template>
                     </el-carousel>
                 </div>
                 <div class="list_content">

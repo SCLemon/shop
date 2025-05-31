@@ -5,12 +5,21 @@
         <div class="list" v-for="(obj,id) in list" :key="id">
             <div class="list_img">
                 <el-carousel height="120px" :autoplay="false" trigger="click" :loop="false">
-                <el-carousel-item v-for="item in obj.src" :key="item">
-                <div class="img_box">
-                    <img :src="`/api/img/download/${item}`" alt="">
-                </div>
-                </el-carousel-item>
-            </el-carousel>
+                    <template v-if="obj.src.length">
+                        <el-carousel-item v-for="item in obj.src" :key="item">
+                            <div class="img_box">
+                            <img :src="`/api/img/download/${item}`" alt="">
+                            </div>
+                        </el-carousel-item>
+                    </template>
+                    <template v-else>
+                        <el-carousel-item>
+                            <div class="img_box">
+                            <img :src="`img/logo_expand.png`" alt="">
+                            </div>
+                        </el-carousel-item>
+                    </template>
+                </el-carousel>
             </div>
             <div class="list_content">
                 <div class="list_title">{{ obj.name }}</div>

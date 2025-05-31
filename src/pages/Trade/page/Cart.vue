@@ -15,7 +15,10 @@
             <div class="list_content">
                 <div class="list_title">{{ obj.name }}</div>
                 <div class="list_detail">{{ obj.detail }}</div>
-                <el-input-number class="mobile_right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
+                <div class="mobile_list_price">
+                        ${{ obj.price * obj.quantity }}
+                        <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)"></i>
+                </div>
                 <div class="list_bottom">
                     <div class="list_price">
                         ${{ obj.price * obj.quantity }}
@@ -23,7 +26,9 @@
                     </div>
                     <div class="list_bottom_right">
                         <el-input-number class="right_quantity" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
+                        <el-input-number class="mobile_right_quantity" size="small" v-model="obj.quantity" @change="handleChange(obj.trade_id, obj.quantity)" :min="1"></el-input-number>
                         <el-button type="primary" class="list_bottom_btn" @click="purchase(obj.trade_id, obj.product_uuid)">立即下單</el-button>
+                        <el-button type="primary" class="mobile_list_bottom_btn" icon="el-icon-edit" circle></el-button>
                     </div>
                 </div>
             </div>
@@ -192,6 +197,9 @@ export default {
     .list_bottom_btn{
         margin-left: 20px;
     }
+    .mobile_list_bottom_btn{
+        display: none;
+    }
     .trash{
         color: red;
         margin-left: 5px;
@@ -199,21 +207,39 @@ export default {
     .trash:hover{
         cursor: pointer;
     }
+    .mobile_list_price{
+        display: none;
+    }
     .mobile_right_quantity{
         display: none;
     }
     @media (max-width: 570px){
         .list_detail{
+            -webkit-line-clamp: 1;
+        }
+        .list_price{
             display: none;
+        }
+        .mobile_list_price{
+            display: block;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 3.5px;
+        }
+        .list_bottom_btn{
+            display: none;
+        }
+        .mobile_list_bottom_btn{
+            display: inline-block;
+            margin-left: 20px;
         }
         .right_quantity{
             display: none;
         }
         .mobile_right_quantity{
-            display: block;
-            position: absolute;
-            right: 0;
+            display: inline-block;
         }
+
     }
     .empty{
         width: 100vw;

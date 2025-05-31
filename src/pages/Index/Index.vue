@@ -176,6 +176,7 @@ export default {
     gap: 15px;
     overflow-y: scroll;
     padding: 15px;
+    height: calc(100vh - 170px);
   }
   .List_item{
     height: 305px;

@@ -2,7 +2,7 @@
   <div class="main">
     <el-dialog title="忘記密碼" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-            <el-form-item label="請輸入使用者帳號" :label-width="formLabelWidth">
+            <el-form-item label="請輸入使用者帳號">
                 <el-input v-model="form.account" autocomplete="off" placeholder="密碼將發送於註冊時的電子信箱"></el-input>
             </el-form-item>
         </el-form>

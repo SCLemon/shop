@@ -66,8 +66,8 @@ router.post('/api/transaction/add', async (req, res) => {
 
         // 2. 查購物車數量
         const [cartRows] = await db.execute(
-            'SELECT quantity FROM Cart_Item WHERE product_uuid = ? AND token = ?',
-            [product_uuid, token]
+            'SELECT quantity FROM Cart_Item WHERE trade_id = ? AND token = ?',
+            [trade_id, token]
         );
         if (cartRows.length === 0) {
             return res.send({ type: 'error', msg: '購物車查無此商品。'});

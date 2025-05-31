@@ -18,7 +18,7 @@
                     <div class="list_detail">{{ obj.product_detail }}</div>
                     <div class="list_bottom">
                         <div class="list_price">
-                            ${{ obj.total_amount }}
+                            <span class="mobile_total">小計：</span> ${{ obj.total_amount }}
                         </div>
                         <div class="list_bottom_right">
                             <el-button type="primary" class="list_bottom_btn" @click="addToCart(obj.product_uuid)" v-if="userInfo.token == obj.token">再次購買</el-button>
@@ -207,5 +207,10 @@
         .empty{
             width: 100vw;
             height: calc(100vh - 206px);
+        }
+        @media (max-width: 425px){
+            .mobile_total{
+                display: none;
             }
+        }
     </style>

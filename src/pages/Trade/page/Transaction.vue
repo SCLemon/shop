@@ -18,7 +18,7 @@
                     <div class="list_detail">{{ obj.product_detail }}</div>
                     <div class="list_bottom">
                         <div class="list_price">
-                            ${{ obj.total_amount }}
+                            <span class="mobile_total">小計：</span> ${{ obj.total_amount }}
                         </div>
                         <div class="list_bottom_right">
                             <i class="el-icon-delete trash" @click="removeItem(obj.trade_id)" v-if="obj.status == '未付款' && userInfo.token == obj.token"></i>
@@ -282,5 +282,10 @@
         .empty{
             width: 100vw;
             height: calc(100vh - 206px);
+        }
+        @media (max-width: 425px){
+            .mobile_total{
+                display: none;
+            }
         }
   </style>

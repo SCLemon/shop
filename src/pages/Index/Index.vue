@@ -49,11 +49,20 @@
 
     <el-dialog title="商品介紹" :visible.sync="detailTableVisible">
       <el-carousel height="200px" :autoplay="false" trigger="click" :loop="false">
-        <el-carousel-item v-for="item in detailProduct.src" :key="item">
-          <div class="detail_img_box">
-            <img :src="`/api/img/download/${item}`" alt="">
-          </div>
-        </el-carousel-item>
+        <template v-if="detailProduct.src?detailProduct.src.length:false">
+          <el-carousel-item v-for="item in detailProduct.src" :key="item">
+            <div class="detail_img_box">
+              <img :src="`/api/img/download/${item}`" alt="">
+            </div>
+          </el-carousel-item>
+        </template>
+        <template v-else>
+          <el-carousel-item>
+            <div class="detail_img_box">
+              <img :src="`img/logo_expand.png`" alt="">
+            </div>
+          </el-carousel-item>
+        </template>
       </el-carousel>
       <div class="detail_1">
         <div class="detail_1_title">{{ detailProduct.name }}</div>
